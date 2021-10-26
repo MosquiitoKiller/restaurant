@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title>Регистрация</title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Главная</a>
+</nav>
+<div class="text-center">
+  <form method="POST">
+    <h2>Регистрация</h2>
+    <div>
+      <label>
+        <input type="text" name="username" placeholder="Username">
+      </label>
+      <h3 th:text="${usernameError}"></h3>
+    </div>
+    <div>
+      <label>
+        <input type="password" name="password" placeholder="Password">
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="password" name="passwordConfirm" placeholder="Confirm your password">
+      </label>
+      <h3 th:text="${passwordError}"></h3>
+    </div>
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+  </form>
+
+</div>
+</body>
+</html>

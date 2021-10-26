@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <title>Вход</title>
+  <link rel="icon" href="https://drive.google.com/uc?export=view&id=13dCjpWflutbu6-9kRlxFd2BJMQAqAE1D">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+</head>
+
+<body>
+<div sec:authorize="isAuthenticated()">
+  <script language="JavaScript">
+    location.href = '/';
+  </script>
+</div>
+<div class="text-center">
+  <form method="POST" action="/login">
+    <h2>Вход в систему</h2>
+    <div>
+      <label>
+        <input name="username" type="text" placeholder="Username" autofocus="true"/>
+      </label>
+      <label>
+        <input name="password" type="password" placeholder="Password"/>
+      </label>
+      <button type="submit" >Log In</button>
+      <h4><a href="/registration">Зарегистрироваться</a></h4>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>
