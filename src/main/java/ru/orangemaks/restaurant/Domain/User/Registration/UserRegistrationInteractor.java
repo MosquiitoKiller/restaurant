@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.servlet.ModelAndView;
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
 
 import java.util.Collections;
+import java.util.HashMap;
 
 
 public class UserRegistrationInteractor implements UserRegistrationInputBoundary {
-    //TODO Bean
     UserDataAccess userDataAccess;
 
     UserRegistrationOutputBoundary userRegistrationOutputBoundary;
@@ -26,7 +25,7 @@ public class UserRegistrationInteractor implements UserRegistrationInputBoundary
     }
 
     @Override
-    public ModelAndView save(RegistrationRequest registrationRequest) {
+    public HashMap<String,String> save(RegistrationRequest registrationRequest) {
         boolean usernameError = userDataAccess.findByUsername(registrationRequest.getUsername())!=null;
         boolean passwordError = !registrationRequest.getPassword().equals(registrationRequest.getPasswordConfirm());
         if(usernameError || passwordError)
@@ -37,7 +36,7 @@ public class UserRegistrationInteractor implements UserRegistrationInputBoundary
         user.setUsername(registrationRequest.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
         userDataAccess.save(user);
-        return userRegistrationOutputBoundary.prepareSuccessView(new RegistrationResponseModel(false,false));
+        return userRegistrationOutputBoundary.prepareSuccessView();
     }
 
     @Override

@@ -1,8 +1,8 @@
 package ru.orangemaks.restaurant.Domain.User.Registration;
 
-import org.springframework.web.servlet.ModelAndView;
+import java.util.HashMap;
 
 public interface UserRegistrationOutputBoundary {
-    ModelAndView prepareSuccessView(RegistrationResponseModel registrationResponseModel);
-    ModelAndView prepareFailView(RegistrationResponseModel registrationResponseModel);
+    HashMap<String,String> prepareSuccessView();
+    HashMap<String,String> prepareFailView(RegistrationResponseModel registrationResponseModel);
 }
