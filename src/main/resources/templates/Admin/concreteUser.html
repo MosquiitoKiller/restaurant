@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/admin/users">Назад</a>
+<a href="/admin">Админка</a>
+<a href="/">Главная</a>
+<h5 th:text="${editStatus}"></h5>
+<table>
+    <thead>
+    <th scope="col">ID</th>
+    <th scope="col">UserName</th>
+    <th scope="col">Roles</th>
+    </thead>
+    <tr>
+        <td th:text="${userId}"></td>
+        <form method="post">
+            <td>
+                <label>
+                    <input type="text" name="username" placeholder="Username" th:value="${username}">
+                </label>
+            </td>
+            <td>
+                <label>
+                    <input type="checkbox" name="ROLE_USER" th:checked="${ROLE_USER}"/>ROLE_USER
+                </label>
+            </td>
+            <td>
+                <label>
+                    <input type="checkbox" name="ROLE_ADMIN" th:checked="${ROLE_ADMIN}"/>ROLE_ADMIN
+                </label>
+            </td>
+            <td>
+                <button type="submit">Edit</button>
+            </td>
+        </form>
+    </tr>
+</table>
+</body>
+</html>

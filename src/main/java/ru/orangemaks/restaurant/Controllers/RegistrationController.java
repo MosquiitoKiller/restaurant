@@ -21,14 +21,13 @@ public class RegistrationController {
 
     @GetMapping("/registration")
     public String registration() {
-        return "registration";
+        return "Login/registration";
     }
 
     @PostMapping("/registration")
     public ModelAndView addUser(@Valid  RegistrationRequest userForm) {
-        HashMap<String,String> map = userRegistrationInputBoundary.save(userForm);
-        ModelAndView modelAndView = new ModelAndView("registration");
-        modelAndView.addAllObjects(map);
+        ModelAndView modelAndView = new ModelAndView("Login/registration");
+        modelAndView.addAllObjects(userRegistrationInputBoundary.save(userForm));
         return modelAndView;
     }
 }

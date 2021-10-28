@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Users Control</title>
+</head>
+<body>
+<a href="/admin">Назад</a>
+<a href="/">Главная</a>
+<form method="post">
+    <input type="number" name="id" placeholder="ID"/>
+    <input type="text" name="username" placeholder="Username">
+    <label>
+        <input type="checkbox" name="ROLE_USER" th:checked="${ROLE_USER}"/>ROLE_USER
+    </label>
+    <label>
+        <input type="checkbox" name="ROLE_ADMIN" th:checked="${ROLE_ADMIN}"/>ROLE_ADMIN
+    </label>
+    <input type="hidden" name="action" th:value="filter"/>
+    <button type="submit">Find</button>
+</form>
+<h3 th:text="${deleteSuccess}"></h3>
+<table>
+    <thead>
+    <th scope="col">ID</th>
+    <th scope="col">UserName</th>
+    <th scope="col">Roles</th>
+    </thead>
+    <th:block th:each="user: ${allUsers}">
+        <tr>
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getUsername()}"></td>
+            <td>
+                <th:block th:each="role: ${user.getRoles()}"><h5 th:text="${role} + ';'"></h5> </th:block>
+            </td>
+            <td>
+                <form method="post">
+                    <input type="hidden" name="userId" th:value="${user.getId()}"/>
+                    <input type="hidden" name="action" th:value="show"/>
+                    <button type="submit">Show</button>
+                </form>
+            </td>
+            <td>
+                <form method="post">
+                    <input type="hidden" name="userId" th:value="${user.getId()}"/>
+                    <input type="hidden" name="action" th:value="delete"/>
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

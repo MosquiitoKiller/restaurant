@@ -32,7 +32,7 @@ public class UserRegistrationInteractor implements UserRegistrationInputBoundary
             return userRegistrationOutputBoundary.prepareFailView(new RegistrationResponseModel(usernameError,passwordError));
 
         User user = new User();
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singletonList(new Role(1L, "ROLE_USER")));
         user.setUsername(registrationRequest.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
         userDataAccess.save(user);
