@@ -36,6 +36,9 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
     @Override
     public HashMap<String, String> editUser(Long id, EditUserRequestModel editUserRequestModel) {
         User user = admin_userDataAccess.findById(id);
+        User userByName = admin_userDataAccess.findByUsername(editUserRequestModel.getUsername());
+        if(userByName!=null && userByName!=user)
+            return admin_userOutputBoundary.prepareFailEditUserView(userMapper(user));
         user.setUsername(editUserRequestModel.getUsername());
 
         List<Role> roles = user.getRoles();
@@ -68,7 +71,7 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
         user.setRoles(roles);
         admin_userDataAccess.save(user);
         UserDtoModel userDtoModel = userMapper(user);
-        return admin_userOutputBoundary.prepareEditUserView(userDtoModel);
+        return admin_userOutputBoundary.prepareSuccessEditUserView(userDtoModel);
     }
 
     @Override

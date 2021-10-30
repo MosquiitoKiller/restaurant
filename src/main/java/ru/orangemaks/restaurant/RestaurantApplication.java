@@ -39,6 +39,7 @@ public class RestaurantApplication {
     static TypeFilter removeModelAndEntitiesFilter() {
         return (MetadataReader mr, MetadataReaderFactory mrf) -> !mr.getClassMetadata()
                 .getClassName()
-                .endsWith("Model");
+                .endsWith("Model")
+                && !mr.getClassMetadata().getClassName().endsWith("Categories");
     }
 }

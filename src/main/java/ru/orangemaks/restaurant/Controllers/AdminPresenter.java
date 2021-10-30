@@ -10,9 +10,17 @@ import java.util.List;
 public class AdminPresenter implements Admin_UserOutputBoundary {
 
     @Override
-    public HashMap<String, String> prepareEditUserView(UserDtoModel userDtoModel) {
+    public HashMap<String, String> prepareSuccessEditUserView(UserDtoModel userDtoModel) {
         HashMap<String,String> viewModel = new HashMap<>();
         viewModel.put("editStatus","Пользователь успешно изменен");
+        viewModel.putAll(prepareFindedUserView(userDtoModel));
+        return viewModel;
+    }
+
+    @Override
+    public HashMap<String, String> prepareFailEditUserView(UserDtoModel userDtoModel) {
+        HashMap<String,String> viewModel = new HashMap<>();
+        viewModel.put("editStatus","Пользователь с таким именем уже существует");
         viewModel.putAll(prepareFindedUserView(userDtoModel));
         return viewModel;
     }
