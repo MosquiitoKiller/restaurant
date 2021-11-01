@@ -75,11 +75,11 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
     }
 
     @Override
-    public HashMap<String,List<UserDtoModel>> filterUsers(FilterRequestModel filterRequestModel) {
-        List<User> users = admin_userDataAccess.filter(filterRequestModel.getId(),
-                filterRequestModel.getUsername(),
-                filterRequestModel.getROLE_USER(),
-                filterRequestModel.getROLE_ADMIN());
+    public HashMap<String,List<UserDtoModel>> filterUsers(FilterUserRequestModel filterUserRequestModel) {
+        List<User> users = admin_userDataAccess.filter(filterUserRequestModel.getId(),
+                filterUserRequestModel.getUsername(),
+                filterUserRequestModel.getROLE_USER(),
+                filterUserRequestModel.getROLE_ADMIN());
         List<UserDtoModel> userDtoModels = listUsersMapper(users);
         return admin_userOutputBoundary.convertUsers("allUsers",userDtoModels);
     }

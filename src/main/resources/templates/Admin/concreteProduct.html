@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>concreteProduct</title>
+</head>
+<body>
+<a href="/admin/products">Назад</a>
+<a href="/admin">Админка</a>
+<a href="/">Главная</a>
+<h5 th:text="${editStatus}"></h5><br>
+<img th:src="${product.getImg()}" alt="Нерабочая ссылка" height="200" width="250"><br>
+<table>
+    <thead>
+    <th scope="col">ID</th>
+    <th scope="col">Name</th>
+    <th scope="col">Price</th>
+    <th scope="col">Category</th>
+    <th scope="col">Description</th>
+    <th scope="col">Img</th>
+    </thead>
+    <tr>
+        <td th:text="${product.getId()}"></td>
+        <form method="post">
+            <td>
+                <label>
+                    <input type="text" name="name" th:placeholder="${product.getName()}">
+                </label>
+            </td>
+            <td>
+                <label>
+                    <input type="number" name="price" th:placeholder="${product.getPrice()}"/>
+                </label>
+            </td>
+            <td>
+                <label>
+                    <select id="category" name="category">
+                        <option th:each="category : ${categories.values()}" th:value="${category.getCategory()}"
+                                th:text="${category.getCategory()}" th:selected="${category.getCategory()==product.getCategory()}"></option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label >
+                    <input type="text" name="description" th:placeholder="${product.getDescription()}"/>
+                </label>
+            </td>
+            <td>
+                <label>
+                    <input type="text" name="img" placeholder="Img source"/>
+                </label>
+            </td>
+            <td>
+                <button type="submit">Edit</button>
+            </td>
+        </form>
+    </tr>
+</table>
+</body>
+</html>

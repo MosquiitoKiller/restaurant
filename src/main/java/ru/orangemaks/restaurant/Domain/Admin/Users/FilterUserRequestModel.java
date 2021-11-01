@@ -1,6 +1,6 @@
 package ru.orangemaks.restaurant.Domain.Admin.Users;
 
-public class FilterRequestModel {
+public class FilterUserRequestModel {
     Long id;
     String username;
     String ROLE_USER;
