@@ -4,6 +4,7 @@ import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserDataAccess;
 import ru.orangemaks.restaurant.Domain.User.Registration.UserDataAccess;
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
+import ru.orangemaks.restaurant.Repositories.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

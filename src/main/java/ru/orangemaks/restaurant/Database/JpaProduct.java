@@ -2,6 +2,7 @@ package ru.orangemaks.restaurant.Database;
 
 import ru.orangemaks.restaurant.Domain.Admin.Products.Admin_ProductDataAccess;
 import ru.orangemaks.restaurant.Entities.Product;
+import ru.orangemaks.restaurant.Repositories.ProductRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

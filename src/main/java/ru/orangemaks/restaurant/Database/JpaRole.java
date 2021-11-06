@@ -2,6 +2,7 @@ package ru.orangemaks.restaurant.Database;
 
 import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_RoleDataAccess;
 import ru.orangemaks.restaurant.Entities.Role;
+import ru.orangemaks.restaurant.Repositories.RoleRepository;
 
 public class JpaRole implements Admin_RoleDataAccess {
     RoleRepository roleRepository;

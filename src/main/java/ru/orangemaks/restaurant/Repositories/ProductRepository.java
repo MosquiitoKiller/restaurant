@@ -1,4 +1,4 @@
-package ru.orangemaks.restaurant.Database;
+package ru.orangemaks.restaurant.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.orangemaks.restaurant.Entities.Product;

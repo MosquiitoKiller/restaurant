@@ -8,7 +8,6 @@ import ru.orangemaks.restaurant.Domain.User.Registration.RegistrationRequest;
 import ru.orangemaks.restaurant.Domain.User.Registration.UserRegistrationInputBoundary;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 
 @Controller
 public class RegistrationController {

@@ -1,7 +1,6 @@
 package ru.orangemaks.restaurant.Domain.Admin.Users;
 
 import java.util.List;
-import java.util.Set;
 
 public class UserDtoModel {
     private Long id;
