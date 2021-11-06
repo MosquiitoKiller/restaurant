@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class JpaProduct implements Admin_ProductDataAccess {
-    ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @PersistenceContext
     private EntityManager em;

@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan("ru.orangemaks.restaurant.Entities")
-@EnableJpaRepositories("ru.orangemaks.restaurant.Database")
+@EnableJpaRepositories("ru.orangemaks.restaurant.Repositories")
 public class RestaurantApplication {
 
     public static void main(String[] args) {

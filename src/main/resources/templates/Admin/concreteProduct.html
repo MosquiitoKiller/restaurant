@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>concreteProduct</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
 <body>
-<a href="/admin/products">Назад</a>
-<a href="/admin">Админка</a>
-<a href="/">Главная</a>
+<nav  class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/products">Назад</a>
+    <a class="navbar-brand" href="/admin">Админка</a>
+    <a class="navbar-brand" href="/">Главная</a>
+</nav>
 <h5 th:text="${editStatus}"></h5><br>
 <img th:src="${product.getImg()}" alt="Нерабочая ссылка" height="200" width="250"><br>
-<table>
+<table class="table table-bordered">
     <thead>
     <th scope="col">ID</th>
     <th scope="col">Name</th>
@@ -34,7 +37,7 @@
             </td>
             <td>
                 <label>
-                    <select id="category" name="category">
+                    <select class="form-select" id="category" name="category">
                         <option th:each="category : ${categories.values()}" th:value="${category.getCategory()}"
                                 th:text="${category.getCategory()}" th:selected="${category.getCategory()==product.getCategory()}"></option>
                     </select>
@@ -51,7 +54,7 @@
                 </label>
             </td>
             <td>
-                <button type="submit">Edit</button>
+                <button type="submit" class="btn btn-warning">Edit</button>
             </td>
         </form>
     </tr>

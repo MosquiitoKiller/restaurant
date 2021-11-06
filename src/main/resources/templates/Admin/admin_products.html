@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Products</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
 <body>
-<a href="/admin">Назад</a>
-<a href="/">Главная</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin">Назад</a>
+    <a class="navbar-brand" href="/">Главная</a>
+</nav>
+
 <form method="post">
     <label>
         <input type="number" name="id" placeholder="ID"/>
@@ -15,16 +19,16 @@
         <input type="text" name="name" placeholder="Name">
     </label>
     <label>
-        <select id="categoryFilter" name="categoryFilter">
+        <select class="form-select" id="categoryFilter" name="categoryFilter">
             <option value="none"></option>
             <option th:each="category : ${categories.values()}" th:value="${category.getCategory()}" th:text="${category.getCategory()}"></option>
         </select>
     </label>
     <input type="hidden" name="action" th:value="filter"/>
-    <button type="submit">Find</button>
+    <button type="submit" class="btn btn-primary">Find</button>
 </form>
 <h3 th:text="${operationStatus}"></h3>
-<table>
+<table class="table table-bordered">
     <thead>
     <th scope="col">ID</th>
     <th scope="col">Name</th>
@@ -49,7 +53,7 @@
             </td>
             <td>
                 <label>
-                    <select id="categoryAdd" name="categoryAdd">
+                    <select class="form-select" id="categoryAdd" name="categoryAdd">
                         <option th:each="category : ${categories.values()}" th:value="${category.getCategory()}" th:text="${category.getCategory()}"></option>
                     </select>
                 </label>
@@ -66,7 +70,7 @@
             </td>
             <td>
                 <input type="hidden" name="action" th:value="create"/>
-                <button type="submit">Create</button>
+                <button type="submit" class="btn btn-success">Create</button>
             </td>
         </form>
     </tr>
@@ -81,14 +85,14 @@
                 <form method="post">
                     <input type="hidden" name="productId" th:value="${product.getId()}"/>
                     <input type="hidden" name="action" th:value="show"/>
-                    <button type="submit">Show</button>
+                    <button type="submit" class="btn btn-primary">Show</button>
                 </form>
             </td>
             <td>
                 <form method="post">
                     <input type="hidden" name="productId" th:value="${product.getId()}"/>
                     <input type="hidden" name="action" th:value="delete"/>
-                    <button type="submit">Delete</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
         </tr>

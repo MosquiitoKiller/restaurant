@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
 <body>
-<a href="/admin/users">Назад</a>
-<a href="/admin">Админка</a>
-<a href="/">Главная</a>
+<nav  class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/admin/users">Назад</a>
+    <a class="navbar-brand" href="/admin">Админка</a>
+    <a class="navbar-brand" href="/">Главная</a>
+</nav>
 <h5 th:text="${editStatus}"></h5>
-<table>
+<table class="table table-bordered">
     <thead>
     <th scope="col">ID</th>
     <th scope="col">UserName</th>
@@ -34,7 +37,7 @@
                 </label>
             </td>
             <td>
-                <button type="submit">Edit</button>
+                <button type="submit" class="btn btn-warning">Edit</button>
             </td>
         </form>
     </tr>

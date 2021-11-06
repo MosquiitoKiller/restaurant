@@ -15,7 +15,7 @@ import java.util.List;
 public class JpaUser implements UserDataAccess, Admin_UserDataAccess {
 
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @PersistenceContext
     private EntityManager em;

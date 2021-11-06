@@ -2,29 +2,27 @@
 <head xmlns:sec="http://www.w3.org/1999/xhtml">
   <title>еда тута</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div>
-    <div sec:authorize="!isAuthenticated()">
+    <div class="dashboard_rules" sec:authorize="!isAuthenticated()">
       <a class="navbar-brand" href="/login">Войти</a>
       <a class="navbar-brand" href="/registration">Зарегистрироваться</a>
     </div>
-    <div sec:authorize="isAuthenticated()">
+    <div class="dashboard_rules" sec:authorize="isAuthenticated()">
       <a class="navbar-brand" href="/lk">Личный кабинет</a>
       <a class="navbar-brand" href="/logout">Выйти</a>
     </div>
-    <a href="/booking">Поиск туров</a>
-    <div sec:authorize="hasRole('MANAGER')">
-      <a href="/manager">Работа с клиентами</a>
-    </div>
-    <div sec:authorize="hasRole('ADMIN')">
-      <a href="/admin">Кабинет администратора</a>
+    <a class="navbar-brand" href="/menu">Меню</a>
+    <div class="dashboard_rules" sec:authorize="hasRole('ADMIN')">
+      <a class="navbar-brand" href="/admin">Кабинет администратора</a>
     </div>
   </div>
 </nav>
 <div class="text-center">
-  Вы зашли на официальный сайт туристического агентства <b>еда тута</b><br>
+  Вы зашли на официальный сайт ресторана <b>еда тута</b><br>
 </div>
 </body>
 </html>

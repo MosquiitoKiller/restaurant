@@ -5,7 +5,7 @@ import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Repositories.RoleRepository;
 
 public class JpaRole implements Admin_RoleDataAccess {
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     public JpaRole(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
