@@ -1,8 +1,13 @@
-package ru.orangemaks.restaurant.Domain.Admin.Users;
+package ru.orangemaks.restaurant.Models;
 
+import ru.orangemaks.restaurant.Entities.Role;
+import ru.orangemaks.restaurant.Entities.User;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class UserDtoModel {
+public class UserDtoModel implements Serializable {
     private Long id;
     private String username;
     private List<String> roles;
@@ -35,6 +40,23 @@ public class UserDtoModel {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+
+    public static List<UserDtoModel> listUsersMapper(List<User> users){
+        List<UserDtoModel> userDtoModels = new ArrayList<>();
+        for (User user: users){
+            userDtoModels.add(userMapper(user));
+        }
+        return userDtoModels;
+    }
+
+    public static UserDtoModel userMapper(User user){
+        List<String> roles = new ArrayList<>();
+        for(Role role:user.getRoles()){
+            roles.add(role.getName());
+        }
+        return new UserDtoModel(user.getId(), user.getUsername(), roles);
     }
 
     @Override

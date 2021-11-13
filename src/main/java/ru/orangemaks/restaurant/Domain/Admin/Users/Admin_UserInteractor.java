@@ -2,6 +2,7 @@ package ru.orangemaks.restaurant.Domain.Admin.Users;
 
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
+import ru.orangemaks.restaurant.Models.UserDtoModel;
 
 import java.util.*;
 
@@ -22,14 +23,14 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
     @Override
     public HashMap<String,List<UserDtoModel>> getAll() {
         List<User> users = admin_userDataAccess.getAll();
-        List<UserDtoModel> userDtoModels = listUsersMapper(users);
+        List<UserDtoModel> userDtoModels = UserDtoModel.listUsersMapper(users);
         return admin_userOutputBoundary.convertUsers("allUsers",userDtoModels);
     }
 
     @Override
     public HashMap<String, String> findConcreteUser(Long id) {
         User user = admin_userDataAccess.findById(id);
-        UserDtoModel userDtoModel = userMapper(user);
+        UserDtoModel userDtoModel = UserDtoModel.userMapper(user);
         return admin_userOutputBoundary.prepareFindedUserView(userDtoModel);
     }
 
@@ -38,7 +39,7 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
         User user = admin_userDataAccess.findById(id);
         User userByName = admin_userDataAccess.findByUsername(editUserRequestModel.getUsername());
         if(userByName!=null && userByName!=user)
-            return admin_userOutputBoundary.prepareFailEditUserView(userMapper(user));
+            return admin_userOutputBoundary.prepareFailEditUserView(UserDtoModel.userMapper(user));
         user.setUsername(editUserRequestModel.getUsername());
 
         List<Role> roles = user.getRoles();
@@ -70,7 +71,7 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
         }
         user.setRoles(roles);
         admin_userDataAccess.save(user);
-        UserDtoModel userDtoModel = userMapper(user);
+        UserDtoModel userDtoModel = UserDtoModel.userMapper(user);
         return admin_userOutputBoundary.prepareSuccessEditUserView(userDtoModel);
     }
 
@@ -80,30 +81,14 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
                 filterUserRequestModel.getUsername(),
                 filterUserRequestModel.getROLE_USER(),
                 filterUserRequestModel.getROLE_ADMIN());
-        List<UserDtoModel> userDtoModels = listUsersMapper(users);
+        List<UserDtoModel> userDtoModels = UserDtoModel.listUsersMapper(users);
         return admin_userOutputBoundary.convertUsers("allUsers",userDtoModels);
     }
 
     @Override
     public HashMap<String,String> deleteUser(Long id) {
         User user = admin_userDataAccess.deleteById(id);
-        UserDtoModel userDtoModel = userMapper(user);
+        UserDtoModel userDtoModel = UserDtoModel.userMapper(user);
         return admin_userOutputBoundary.prepareDeletedUserView(userDtoModel);
-    }
-
-    private List<UserDtoModel> listUsersMapper(List<User> users){
-        List<UserDtoModel> userDtoModels = new ArrayList<>();
-        for (User user: users){
-            userDtoModels.add(userMapper(user));
-        }
-        return userDtoModels;
-    }
-
-    private UserDtoModel userMapper(User user){
-        List<String> roles = new ArrayList<>();
-        for(Role role:user.getRoles()){
-            roles.add(role.getName());
-        }
-        return new UserDtoModel(user.getId(), user.getUsername(), roles);
     }
 }

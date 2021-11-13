@@ -7,6 +7,7 @@ import ru.orangemaks.restaurant.Domain.Admin.Products.*;
 import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserInputBoundary;
 import ru.orangemaks.restaurant.Domain.Admin.Users.EditUserRequestModel;
 import ru.orangemaks.restaurant.Domain.Admin.Users.FilterUserRequestModel;
+import ru.orangemaks.restaurant.Models.ProductCategories;
 
 import javax.validation.Valid;
 import java.util.HashMap;

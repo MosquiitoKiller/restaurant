@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:include="general.html :: headerfiles"></th:block>
+    <title>menu</title>
+</head>
+<body>
+<a href="/">Назад</a><br>
+<nav id="nav"></nav>
+<div id="menu"></div>
+<script>
+    window.app = new Vue({
+        el: '#menu',
+        data: {
+            info:null,
+            products:null,
+            categories: []
+        },
+        async mounted() {
+            await this.getInfo();
+        },
+        methods: {
+            getInfo: async function (event) {
+                await axios
+                    .get("/get_menu")
+                    .then(response => {
+                        this.info = response.data
+                    })
+                this.products = this.info.products
+                this.categories = this.info.categories
+                this.formNav()
+                this.formMenu()
+            },
+            formNav: function () {
+                const nav = document.getElementById('nav')
+                for (let i = 0; i < this.categories.length; i++) {
+                    const a = document.createElement('a')
+                    a.href = `#${this.categories[i]}`
+                    a.textContent = `${this.categories[i]}`
+                    nav.appendChild(a)
+                }
+            },
+            formMenu: function (){
+                for (let i = 0; i < this.categories.length; i++) {
+                    const name = document.createElement('div')
+                    name.classList.add(this.categories[i])
+                    const categoryName = document.createElement('h2')
+                    categoryName.textContent = `${this.categories[i]}`
+                    const a = document.createElement('a')
+                    a.name = `${this.categories[i]}`
+                    name.appendChild(categoryName)
+                    name.appendChild(a)
+
+                    for (let j = 0; j < this.products[this.categories[i]].length; j++) {
+                        const p = document.createElement('p')
+                        const img = document.createElement('img')
+                        const h4 = document.createElement('h4')
+                        const desc = document.createElement('h6')
+                        img.src = this.products[this.categories[i]][j].img
+                        img.width = 200
+                        img.height = 200
+                        h4.textContent = `${this.products[this.categories[i]][j].name} Цена: ${this.products[this.categories[i]][j].price} Описание:`
+                        desc.textContent = `${this.products[this.categories[i]][j].description}`
+                        p.appendChild(img)
+                        p.appendChild(h4)
+                        p.appendChild(desc)
+                        name.appendChild(p)
+                    }
+                    document.getElementById('menu').appendChild(name)
+                }
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

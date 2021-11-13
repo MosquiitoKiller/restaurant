@@ -1,5 +1,7 @@
 package ru.orangemaks.restaurant.Domain.Admin.Products;
 
+import ru.orangemaks.restaurant.Models.ProductDtoModel;
+
 import java.util.HashMap;
 import java.util.List;
 

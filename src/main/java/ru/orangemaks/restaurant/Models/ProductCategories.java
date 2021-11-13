@@ -1,4 +1,4 @@
-package ru.orangemaks.restaurant.Domain.Admin.Products;
+package ru.orangemaks.restaurant.Models;
 
 public enum ProductCategories {
     SIGNATURE_DISH("signature dish"),

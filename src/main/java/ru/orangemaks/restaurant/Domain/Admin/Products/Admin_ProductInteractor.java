@@ -1,8 +1,8 @@
 package ru.orangemaks.restaurant.Domain.Admin.Products;
 
 import ru.orangemaks.restaurant.Entities.Product;
+import ru.orangemaks.restaurant.Models.ProductDtoModel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
     @Override
     public HashMap<String, List<ProductDtoModel>> getAll() {
         List<Product> products = admin_productDataAccess.getAll();
-        return admin_productOutputBoundary.prepareProducts(listProductMapper(products));
+        return admin_productOutputBoundary.prepareProducts(ProductDtoModel.listProductMapper(products));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
                 createProductRequestModel.getDescription(),
                 createProductRequestModel.getImg());
         admin_productDataAccess.save(product);
-        return admin_productOutputBoundary.prepareSuccessAddProductView(productMapper(product));
+        return admin_productOutputBoundary.prepareSuccessAddProductView(ProductDtoModel.productMapper(product));
     }
 
     @Override
@@ -44,13 +44,13 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
         List<Product> products = admin_productDataAccess.filter(filterProductRequestModel.getId(),
                 filterProductRequestModel.getName(),
                 filterProductRequestModel.getCategoryFilter());
-        return admin_productOutputBoundary.prepareProducts(listProductMapper(products));
+        return admin_productOutputBoundary.prepareProducts(ProductDtoModel.listProductMapper(products));
     }
 
     @Override
     public HashMap<String, ProductDtoModel> findConcreteProduct(Long id) {
         Product product = admin_productDataAccess.findById(id);
-        return admin_productOutputBoundary.prepareFindedProductView(productMapper(product));
+        return admin_productOutputBoundary.prepareFindedProductView(ProductDtoModel.productMapper(product));
     }
 
     @Override
@@ -62,24 +62,12 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
         if(!editProductRequestModel.getDescription().equals("")) product.setDescription(editProductRequestModel.getDescription());
         if(!editProductRequestModel.getImg().equals("")) product.setImg(editProductRequestModel.getImg());
         admin_productDataAccess.save(product);
-        return admin_productOutputBoundary.prepareSuccessEditProductView(productMapper(product));
+        return admin_productOutputBoundary.prepareSuccessEditProductView(ProductDtoModel.productMapper(product));
     }
 
     @Override
     public HashMap<String, String> deleteProduct(Long id) {
         Product product = admin_productDataAccess.deleteById(id);
-        return admin_productOutputBoundary.prepareDeletedProductView(productMapper(product));
-    }
-
-    private ProductDtoModel productMapper(Product product) {
-        return new ProductDtoModel(product.getId(), product.getName(), product.getPrice(),
-                product.getCategory(), product.getDescription(), product.getImg());
-    }
-
-    private List<ProductDtoModel> listProductMapper(List<Product> products) {
-        List<ProductDtoModel> productDtoModels = new ArrayList<>();
-        for (Product product : products)
-            productDtoModels.add(productMapper(product));
-        return productDtoModels;
+        return admin_productOutputBoundary.prepareDeletedProductView(ProductDtoModel.productMapper(product));
     }
 }

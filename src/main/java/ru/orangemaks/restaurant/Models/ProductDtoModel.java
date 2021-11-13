@@ -1,6 +1,12 @@
-package ru.orangemaks.restaurant.Domain.Admin.Products;
+package ru.orangemaks.restaurant.Models;
 
-public class ProductDtoModel {
+import ru.orangemaks.restaurant.Entities.Product;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProductDtoModel implements Serializable {
     Long id;
     String name;
     Integer price;
@@ -63,5 +69,17 @@ public class ProductDtoModel {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    static public ProductDtoModel productMapper(Product product) {
+        return new ProductDtoModel(product.getId(), product.getName(), product.getPrice(),
+                product.getCategory(), product.getDescription(), product.getImg());
+    }
+
+    static public List<ProductDtoModel> listProductMapper(List<Product> products) {
+        List<ProductDtoModel> productDtoModels = new ArrayList<>();
+        for (Product product : products)
+            productDtoModels.add(productMapper(product));
+        return productDtoModels;
     }
 }

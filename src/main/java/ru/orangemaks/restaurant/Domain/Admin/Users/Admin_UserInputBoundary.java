@@ -1,6 +1,7 @@
 package ru.orangemaks.restaurant.Domain.Admin.Users;
 
 import org.springframework.stereotype.Component;
+import ru.orangemaks.restaurant.Models.UserDtoModel;
 
 import java.util.HashMap;
 import java.util.List;

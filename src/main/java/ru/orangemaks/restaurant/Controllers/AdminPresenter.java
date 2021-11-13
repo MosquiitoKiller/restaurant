@@ -1,9 +1,9 @@
 package ru.orangemaks.restaurant.Controllers;
 
 import ru.orangemaks.restaurant.Domain.Admin.Products.Admin_ProductOutputBoundary;
-import ru.orangemaks.restaurant.Domain.Admin.Products.ProductDtoModel;
+import ru.orangemaks.restaurant.Models.ProductDtoModel;
 import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserOutputBoundary;
-import ru.orangemaks.restaurant.Domain.Admin.Users.UserDtoModel;
+import ru.orangemaks.restaurant.Models.UserDtoModel;
 
 import java.util.HashMap;
 import java.util.List;
