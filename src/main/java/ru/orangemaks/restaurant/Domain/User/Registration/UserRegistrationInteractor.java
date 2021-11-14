@@ -25,7 +25,7 @@ public class UserRegistrationInteractor implements UserRegistrationInputBoundary
     }
 
     @Override
-    public HashMap<String,String> save(RegistrationRequest registrationRequest) {
+    public RegistrationResponseModel save(RegistrationRequest registrationRequest) {
         boolean usernameError = userDataAccess.findByUsername(registrationRequest.getUsername())!=null;
         boolean passwordError = !registrationRequest.getPassword().equals(registrationRequest.getPasswordConfirm());
         if(usernameError || passwordError)

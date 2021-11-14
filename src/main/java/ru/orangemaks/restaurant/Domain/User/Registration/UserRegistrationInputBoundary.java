@@ -7,5 +7,5 @@ import java.util.HashMap;
 
 @Component
 public interface UserRegistrationInputBoundary extends UserDetailsService {
-    HashMap<String,String> save(RegistrationRequest registrationRequest);
+    RegistrationResponseModel save(RegistrationRequest registrationRequest);
 }

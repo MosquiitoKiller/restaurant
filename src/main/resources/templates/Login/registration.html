@@ -1,38 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-  <meta charset="utf-8">
+  <th:block th:include="general.html :: headerfiles"></th:block>
   <title>Регистрация</title>
-  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
-
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">Главная</a>
 </nav>
-<div class="text-center">
-  <form method="POST">
+<div id="registration" class="text-center">
+  <form v-on:submit.prevent="addUser">
     <h2>Регистрация</h2>
-    <div>
-      <label>
-        <input type="email" name="username" placeholder="Username">
-      </label>
-      <h3 th:text="${usernameError}"></h3>
+    <div class="input-group">
+      <div>
+        <label>
+          <input type="email" v-model="username" id="username" placeholder="Username">
+        </label>
+      </div>
+      <div>
+        <label>
+          <input type="password" v-model="password" id="password" placeholder="Password">
+        </label>
+      </div>
+      <div>
+        <label>
+          <input type="password" v-model="passwordConfirm" id="passwordConfirm" placeholder="Confirm your password">
+        </label>
+      </div>
+      <input type="submit" class="btn btn-primary addUser" value="Зарегистрироваться">
     </div>
-    <div>
-      <label>
-        <input type="password" name="password" placeholder="Password">
-      </label>
-    </div>
-    <div>
-      <label>
-        <input type="password" name="passwordConfirm" placeholder="Confirm your password">
-      </label>
-      <h3 th:text="${passwordError}"></h3>
-    </div>
-    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
   </form>
-
+  <h3>{{usernameError}}</h3>
+  <h3>{{passwordError}}</h3>
 </div>
+<script>
+  window.app = new Vue({
+    el: '#registration',
+    data: {
+      username:'',
+      password:'',
+      passwordConfirm: '',
+      usernameError:'',
+      passwordError:'',
+      info: null
+    },
+    async mounted(){
+    },
+    methods: {
+      setInfo: function (event) {
+        if (this.info.usernameError === true) this.usernameError = "Пользователь с таким именем уже существует"
+        if (this.info.passwordError === true) this.passwordError = "Пароли не совпадают"
+        if (this.info.passwordError === false && this.info.usernameError === false) location.href = '/login'
+      },
+      addUser: function (event) {
+        axios.post("/addUser",{
+          "username": this.username,
+          "password": this.password,
+          "passwordConfirm": this.passwordConfirm
+        }).then(registration=>{
+          this.info = registration.data
+          this.setInfo()
+        })
+      }
+    }
+  })
+</script>
 </body>
 </html>

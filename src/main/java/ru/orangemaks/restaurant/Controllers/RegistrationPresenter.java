@@ -7,15 +7,12 @@ import java.util.HashMap;
 
 public class RegistrationPresenter implements UserRegistrationOutputBoundary {
     @Override
-    public HashMap<String,String> prepareSuccessView() {
-        return new HashMap<String,String>();
+    public RegistrationResponseModel prepareSuccessView() {
+        return new RegistrationResponseModel(false,false);
     }
 
     @Override
-    public HashMap<String,String> prepareFailView(RegistrationResponseModel registrationResponseModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        if(registrationResponseModel.usernameError) viewModel.put("usernameError","user with this username already exist");
-        if(registrationResponseModel.passwordError) viewModel.put("passwordError","password not confirm");
-        return viewModel;
+    public RegistrationResponseModel prepareFailView(RegistrationResponseModel registrationResponseModel) {
+        return registrationResponseModel;
     }
 }
