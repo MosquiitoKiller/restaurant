@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
+import ru.orangemaks.restaurant.Models.RoleCategories;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class UserRegistrationInteractor implements UserRegistrationInputBoundary
             return userRegistrationOutputBoundary.prepareFailView(new RegistrationResponseModel(usernameError,passwordError));
 
         User user = new User();
-        user.setRoles(Collections.singletonList(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singletonList(new Role(RoleCategories.ROLE_USER.getId(), RoleCategories.ROLE_USER.name())));
         user.setUsername(registrationRequest.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
         userDataAccess.save(user);

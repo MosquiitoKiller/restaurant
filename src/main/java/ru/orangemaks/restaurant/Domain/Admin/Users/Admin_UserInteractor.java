@@ -2,6 +2,7 @@ package ru.orangemaks.restaurant.Domain.Admin.Users;
 
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
+import ru.orangemaks.restaurant.Models.RoleCategories;
 import ru.orangemaks.restaurant.Models.UserDtoModel;
 
 import java.util.*;
@@ -21,53 +22,50 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
     }
 
     @Override
-    public HashMap<String,List<UserDtoModel>> getAll() {
+    public List<UserDtoModel> getAll() {
         List<User> users = admin_userDataAccess.getAll();
         List<UserDtoModel> userDtoModels = UserDtoModel.listUsersMapper(users);
-        return admin_userOutputBoundary.convertUsers("allUsers",userDtoModels);
+        return admin_userOutputBoundary.convertUsers(userDtoModels);
     }
 
     @Override
-    public HashMap<String, String> findConcreteUser(Long id) {
+    public UserDtoModel findConcreteUser(Long id) {
         User user = admin_userDataAccess.findById(id);
         UserDtoModel userDtoModel = UserDtoModel.userMapper(user);
         return admin_userOutputBoundary.prepareFindedUserView(userDtoModel);
     }
 
     @Override
-    public HashMap<String, String> editUser(Long id, EditUserRequestModel editUserRequestModel) {
+    public boolean editUser(Long id, EditUserRequestModel editUserRequestModel) {
         User user = admin_userDataAccess.findById(id);
         User userByName = admin_userDataAccess.findByUsername(editUserRequestModel.getUsername());
         if(userByName!=null && userByName!=user)
             return admin_userOutputBoundary.prepareFailEditUserView(UserDtoModel.userMapper(user));
-        user.setUsername(editUserRequestModel.getUsername());
+
+        if (!editUserRequestModel.getUsername().equals("")) user.setUsername(editUserRequestModel.getUsername());
 
         List<Role> roles = user.getRoles();
         boolean alreadyExistRoleUser = false;
-        for (Role role:user.getRoles()){
-            if (role.getName().equals("ROLE_USER")) {
-                alreadyExistRoleUser = true;
-                break;
-            }
-        }
         boolean alreadyExistRoleAdmin = false;
         for (Role role:user.getRoles()){
-            if (role.getName().equals("ROLE_ADMIN")) {
+            if (role.getName().equals(RoleCategories.ROLE_USER.name())) {
+                alreadyExistRoleUser = true;
+            }
+            if (role.getName().equals(RoleCategories.ROLE_ADMIN.name())) {
                 alreadyExistRoleAdmin = true;
-                break;
             }
         }
-        if (editUserRequestModel.getROLE_USER().equals("on")){
-            if (!alreadyExistRoleUser) roles.add(admin_roleDataAccess.findById(1L));
+        if (!editUserRequestModel.getRoleUser().equals("")){
+            if (!alreadyExistRoleUser) roles.add(admin_roleDataAccess.findById(RoleCategories.ROLE_USER.getId()));
         }
         else{
-            if(alreadyExistRoleUser) roles.remove(admin_roleDataAccess.findById(1L));
+            if(alreadyExistRoleUser) roles.remove(admin_roleDataAccess.findById(RoleCategories.ROLE_USER.getId()));
         }
-        if (editUserRequestModel.getROLE_ADMIN().equals("on")){
-            if (!alreadyExistRoleAdmin) roles.add(admin_roleDataAccess.findById(2L));
+        if (!editUserRequestModel.getRoleAdmin().equals("")){
+            if (!alreadyExistRoleAdmin) roles.add(admin_roleDataAccess.findById(RoleCategories.ROLE_ADMIN.getId()));
         }
         else{
-            if (alreadyExistRoleAdmin) roles.remove(admin_roleDataAccess.findById(2L));
+            if (alreadyExistRoleAdmin) roles.remove(admin_roleDataAccess.findById(RoleCategories.ROLE_ADMIN.getId()));
         }
         user.setRoles(roles);
         admin_userDataAccess.save(user);
@@ -76,17 +74,17 @@ public class Admin_UserInteractor implements Admin_UserInputBoundary {
     }
 
     @Override
-    public HashMap<String,List<UserDtoModel>> filterUsers(FilterUserRequestModel filterUserRequestModel) {
+    public List<UserDtoModel> filterUsers(FilterUserRequestModel filterUserRequestModel) {
         List<User> users = admin_userDataAccess.filter(filterUserRequestModel.getId(),
                 filterUserRequestModel.getUsername(),
-                filterUserRequestModel.getROLE_USER(),
-                filterUserRequestModel.getROLE_ADMIN());
+                filterUserRequestModel.getRoleUser(),
+                filterUserRequestModel.getRoleAdmin());
         List<UserDtoModel> userDtoModels = UserDtoModel.listUsersMapper(users);
-        return admin_userOutputBoundary.convertUsers("allUsers",userDtoModels);
+        return admin_userOutputBoundary.convertUsers(userDtoModels);
     }
 
     @Override
-    public HashMap<String,String> deleteUser(Long id) {
+    public UserDtoModel deleteUser(Long id) {
         User user = admin_userDataAccess.deleteById(id);
         UserDtoModel userDtoModel = UserDtoModel.userMapper(user);
         return admin_userOutputBoundary.prepareDeletedUserView(userDtoModel);

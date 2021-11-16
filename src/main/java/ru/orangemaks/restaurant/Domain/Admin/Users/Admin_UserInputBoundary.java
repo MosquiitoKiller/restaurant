@@ -8,9 +8,9 @@ import java.util.List;
 
 @Component
 public interface Admin_UserInputBoundary {
-    HashMap<String,List<UserDtoModel>> getAll();
-    HashMap<String,String> findConcreteUser(Long id);
-    HashMap<String,String> editUser(Long id, EditUserRequestModel editUserRequestModel);
-    HashMap<String,List<UserDtoModel>> filterUsers(FilterUserRequestModel filterUserRequestModel);
-    HashMap<String,String> deleteUser(Long id);
+    List<UserDtoModel> getAll();
+    UserDtoModel findConcreteUser(Long id);
+    boolean editUser(Long id, EditUserRequestModel editUserRequestModel);
+    List<UserDtoModel> filterUsers(FilterUserRequestModel filterUserRequestModel);
+    UserDtoModel deleteUser(Long id);
 }

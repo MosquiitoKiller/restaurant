@@ -1,6 +1,6 @@
 package ru.orangemaks.restaurant.Controllers;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.orangemaks.restaurant.Domain.Admin.Products.*;
@@ -8,11 +8,12 @@ import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserInputBoundary;
 import ru.orangemaks.restaurant.Domain.Admin.Users.EditUserRequestModel;
 import ru.orangemaks.restaurant.Domain.Admin.Users.FilterUserRequestModel;
 import ru.orangemaks.restaurant.Models.ProductCategories;
+import ru.orangemaks.restaurant.Models.UserDtoModel;
 
 import javax.validation.Valid;
-import java.util.HashMap;
+import java.util.List;
 
-@Controller()
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
     private final Admin_UserInputBoundary admin_userInputBoundary;
@@ -24,59 +25,61 @@ public class AdminController {
         this.admin_productInputBoundary = admin_productInputBoundary;
     }
 
-    @GetMapping("/users")
-    public ModelAndView allUsers(){
-        ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
-        modelAndView.addAllObjects(admin_userInputBoundary.getAll());
-        return modelAndView;
+    @GetMapping("/allUsers")
+    public List<UserDtoModel> allUsers(){
+        return admin_userInputBoundary.getAll();
     }
 
-    @PostMapping("/users")
-    public ModelAndView users(FilterUserRequestModel filterUserRequestModel,
-                              Long userId,
-                              String action){
-        if(action.equals("filter")){
-            if (filterUserRequestModel.getROLE_USER()==null)
-                filterUserRequestModel.setROLE_USER("");
-            if (filterUserRequestModel.getROLE_ADMIN()==null)
-                filterUserRequestModel.setROLE_ADMIN("");
-
-            ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
-            modelAndView.addAllObjects(admin_userInputBoundary.filterUsers(filterUserRequestModel));
-            return modelAndView;
-        }
-        else if(action.equals("delete")){
-            ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
-            HashMap<String,String> map = admin_userInputBoundary.deleteUser(userId);
-            for (String key: map.keySet()) {
-                modelAndView.addObject(key,map.get(key));
-            }
-            modelAndView.addAllObjects(admin_userInputBoundary.getAll());
-            return modelAndView;
-        }
-        else{
-            return new ModelAndView("redirect:/admin/users/"+userId);
-        }
+    @PostMapping("/filterUsers")
+    public List<UserDtoModel> filter(@RequestBody FilterUserRequestModel filterUserRequestModel){
+        return admin_userInputBoundary.filterUsers(filterUserRequestModel);
     }
 
-    @GetMapping("/users/{userId}")
-    public ModelAndView showConcreteUser(@PathVariable Long userId){
-        ModelAndView modelAndView = new ModelAndView("Admin/concreteUser");
-        modelAndView.addAllObjects(admin_userInputBoundary.findConcreteUser(userId));
-        return modelAndView;
+    @DeleteMapping("/deleteUser/{userId}")
+    public UserDtoModel delete(@PathVariable Long userId){
+        return admin_userInputBoundary.deleteUser(userId);
     }
 
-    @PostMapping("/users/{userId}")
-    public ModelAndView editUser(@Valid EditUserRequestModel editUserRequestModel,
-                                 @PathVariable Long userId){
-        if (editUserRequestModel.getROLE_USER()==null)
-            editUserRequestModel.setROLE_USER("");
-        if (editUserRequestModel.getROLE_ADMIN()==null)
-            editUserRequestModel.setROLE_ADMIN("");
 
-        ModelAndView modelAndView = new ModelAndView("Admin/concreteUser");
-        modelAndView.addAllObjects(admin_userInputBoundary.editUser(userId,editUserRequestModel));
-        return modelAndView;
+//    @PostMapping("/users")
+//    public ModelAndView users(FilterUserRequestModel filterUserRequestModel,
+//                              Long userId,
+//                              String action){
+//        if(action.equals("filter")){
+////            if (filterUserRequestModel.getROLE_USER()==null)
+////                filterUserRequestModel.setROLE_USER("");
+////            if (filterUserRequestModel.getROLE_ADMIN()==null)
+////                filterUserRequestModel.setROLE_ADMIN("");
+////
+////            ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
+////            modelAndView.addAllObjects(admin_userInputBoundary.filterUsers(filterUserRequestModel));
+////            return modelAndView;
+//        }
+//        else if(action.equals("delete")){
+////            ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
+////            HashMap<String,String> map = admin_userInputBoundary.deleteUser(userId);
+////            for (String key: map.keySet()) {
+////                modelAndView.addObject(key,map.get(key));
+////            }
+////            modelAndView.addAllObjects(admin_userInputBoundary.getAll());
+////            return modelAndView;
+//        }
+//        else{
+//            return new ModelAndView("redirect:/admin/users/"+userId);
+//        }
+//    }
+
+    @GetMapping("/user/{userId}")
+    public UserDtoModel showConcreteUser(@PathVariable Long userId){
+        return admin_userInputBoundary.findConcreteUser(userId);
+    }
+
+    @PutMapping("/user/{userId}")
+    public boolean editUser(@PathVariable Long userId,
+                            @RequestBody EditUserRequestModel editUserRequestModel
+                                 ){
+        System.out.println(editUserRequestModel.getUsername()+"!"+editUserRequestModel.getRoleUser()+"!"+editUserRequestModel.getRoleAdmin());
+        return admin_userInputBoundary.editUser(userId,editUserRequestModel);
     }
 
     @GetMapping("/products")

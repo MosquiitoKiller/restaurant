@@ -11,43 +11,28 @@ import java.util.List;
 public class AdminPresenter implements Admin_UserOutputBoundary, Admin_ProductOutputBoundary {
 
     @Override
-    public HashMap<String, String> prepareSuccessEditUserView(UserDtoModel userDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("editStatus","Пользователь успешно изменен");
-        viewModel.putAll(prepareFindedUserView(userDtoModel));
-        return viewModel;
+    public boolean prepareSuccessEditUserView(UserDtoModel userDtoModel) {
+        return true;
     }
 
     @Override
-    public HashMap<String, String> prepareFailEditUserView(UserDtoModel userDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("editStatus","Пользователь с таким именем уже существует");
-        viewModel.putAll(prepareFindedUserView(userDtoModel));
-        return viewModel;
+    public boolean prepareFailEditUserView(UserDtoModel userDtoModel) {
+        return false;
     }
 
     @Override
-    public HashMap<String, String> prepareDeletedUserView(UserDtoModel userDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("deleteSuccess","Пользователь "+userDtoModel.toString()+" успешно удален");
-        return viewModel;
+    public UserDtoModel prepareDeletedUserView(UserDtoModel userDtoModel) {
+        return userDtoModel;
     }
 
     @Override
-    public HashMap<String, String> prepareFindedUserView(UserDtoModel userDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("userId",String.valueOf(userDtoModel.getId()));
-        viewModel.put("username",userDtoModel.getUsername());
-        viewModel.put("ROLE_USER",String.valueOf(userDtoModel.getRoles().contains("ROLE_USER")));
-        viewModel.put("ROLE_ADMIN",String.valueOf(userDtoModel.getRoles().contains("ROLE_ADMIN")));
-        return viewModel;
+    public UserDtoModel prepareFindedUserView(UserDtoModel userDtoModel) {
+        return userDtoModel;
     }
 
     @Override
-    public HashMap<String, List<UserDtoModel>> convertUsers(String place,List<UserDtoModel> users) {
-        HashMap<String,List<UserDtoModel>> viewModel = new HashMap<>();
-        viewModel.put(place,users);
-        return viewModel;
+    public List<UserDtoModel> convertUsers(List<UserDtoModel> users) {
+        return users;
     }
 
     @Override

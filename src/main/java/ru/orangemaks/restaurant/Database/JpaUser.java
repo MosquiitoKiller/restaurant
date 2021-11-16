@@ -4,6 +4,7 @@ import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserDataAccess;
 import ru.orangemaks.restaurant.Domain.User.Registration.UserDataAccess;
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
+import ru.orangemaks.restaurant.Models.RoleCategories;
 import ru.orangemaks.restaurant.Repositories.UserRepository;
 
 import javax.persistence.EntityManager;
@@ -42,8 +43,8 @@ public class JpaUser implements UserDataAccess, Admin_UserDataAccess {
 
         Predicate predicateForId = cb.equal(user.get("id"), id);
         Predicate predicateForUsername = cb.like(user.get("username"), username);
-        Predicate predicateForROLE_USER = cb.like(join.get("name").as(String.class),"ROLE_USER");
-        Predicate predicateForROLE_ADMIN = cb.like(join.get("name").as(String.class),"ROLE_ADMIN");
+        Predicate predicateForRoleUser = cb.like(join.get("name").as(String.class), RoleCategories.ROLE_USER.name());
+        Predicate predicateForRoleAdmin = cb.like(join.get("name").as(String.class),RoleCategories.ROLE_ADMIN.name());
 
         Predicate fieldPredicate = null;
         Predicate rolePredicate = null;
@@ -57,11 +58,11 @@ public class JpaUser implements UserDataAccess, Admin_UserDataAccess {
             else fieldPredicate = predicateForUsername;
         }
         if(!ROLE_USER.equals("")){
-            rolePredicate = cb.and(predicateForROLE_USER);
+            rolePredicate = cb.and(predicateForRoleUser);
         }
         if(!ROLE_ADMIN.equals("")){
-            if (rolePredicate != null) rolePredicate = cb.or(rolePredicate,predicateForROLE_ADMIN);
-            else rolePredicate = predicateForROLE_ADMIN;
+            if (rolePredicate != null) rolePredicate = cb.or(rolePredicate,predicateForRoleAdmin);
+            else rolePredicate = predicateForRoleAdmin;
         }
 
         if (fieldPredicate==null) finalePredicate = rolePredicate;

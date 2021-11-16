@@ -3,8 +3,8 @@ package ru.orangemaks.restaurant.Domain.Admin.Users;
 public class FilterUserRequestModel {
     Long id;
     String username;
-    String ROLE_USER;
-    String ROLE_ADMIN;
+    String roleUser;
+    String roleAdmin;
 
     public Long getId() {
         return id;
@@ -22,19 +22,19 @@ public class FilterUserRequestModel {
         this.username = username;
     }
 
-    public String getROLE_USER() {
-        return ROLE_USER;
+    public String getRoleUser() {
+        return roleUser;
     }
 
-    public void setROLE_USER(String ROLE_USER) {
-        this.ROLE_USER = ROLE_USER;
+    public void setRoleUser(String roleUser) {
+        this.roleUser = roleUser;
     }
 
-    public String getROLE_ADMIN() {
-        return ROLE_ADMIN;
+    public String getRoleAdmin() {
+        return roleAdmin;
     }
 
-    public void setROLE_ADMIN(String ROLE_ADMIN) {
-        this.ROLE_ADMIN = ROLE_ADMIN;
+    public void setRoleAdmin(String roleAdmin) {
+        this.roleAdmin = roleAdmin;
     }
 }

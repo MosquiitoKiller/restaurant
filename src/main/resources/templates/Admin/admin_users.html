@@ -1,57 +1,108 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <th:block th:include="general.html :: headerfiles"></th:block>
     <title>Users Control</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/admin">Назад</a>
     <a class="navbar-brand" href="/">Главная</a>
 </nav>
-<form method="post">
-    <input type="number" name="id" placeholder="ID"/>
-    <input type="text" name="username" placeholder="Username">
-    <label>
-        <input type="checkbox" name="ROLE_USER" th:checked="${ROLE_USER}"/>ROLE_USER
-    </label>
-    <label>
-        <input type="checkbox" name="ROLE_ADMIN" th:checked="${ROLE_ADMIN}"/>ROLE_ADMIN
-    </label>
-    <input type="hidden" name="action" th:value="filter"/>
-    <button type="submit" class="btn btn-primary">Find</button>
-</form>
-<h3 th:text="${deleteSuccess}"></h3>
-<table class="table table-bordered">
-    <thead>
-    <th scope="col">ID</th>
-    <th scope="col">UserName</th>
-    <th scope="col">Roles</th>
-    </thead>
-    <th:block th:each="user: ${allUsers}">
-        <tr>
-            <td th:text="${user.getId()}"></td>
-            <td th:text="${user.getUsername()}"></td>
-            <td>
-                <th:block th:each="role: ${user.getRoles()}"><h5 th:text="${role} + ';'"></h5> </th:block>
-            </td>
-            <td>
-                <form method="post">
-                    <input type="hidden" name="userId" th:value="${user.getId()}"/>
-                    <input type="hidden" name="action" th:value="show"/>
-                    <button type="submit" class="btn btn-primary">Show</button>
-                </form>
-            </td>
-            <td>
-                <form method="post">
-                    <input type="hidden" name="userId" th:value="${user.getId()}"/>
-                    <input type="hidden" name="action" th:value="delete"/>
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
-    </th:block>
-</table>
+<div id="app">
+    <form v-on:submit.prevent="findUsers">
+        <input type="number" v-model="id" name="id" placeholder="ID"/>
+        <input type="text" v-model="username" name="username" placeholder="Username"/>
+        <label>
+            <input type="checkbox" v-model="role_user" value="true" name="ROLE_USER"/>ROLE_USER
+        </label>
+        <label>
+            <input type="checkbox" v-model="role_admin" value="true" name="ROLE_ADMIN"/>ROLE_ADMIN
+        </label>
+        <input type="submit" class="btn btn-primary findUsers" value="Найти">
+    </form>
+
+    <h3 v-if="deleted != ''">Пользователь {{deleted}} успешно удален</h3>
+    <table class="table table-bordered">
+        <thead>
+            <th scope="col">ID</th>
+            <th scope="col">UserName</th>
+            <th scope="col">Roles</th>
+            <th scope="col" colspan="2">Actions</th>
+        </thead>
+        <tbody>
+            <tr v-for="user in this.users">
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td >
+                    <h5 v-for="role in user.roles">{{role}}</h5>
+                </td>
+                <td>
+                    <form v-on:submit.prevent="showUser(user)">
+                        <input type="submit" class="btn btn-primary showUser" value="Show">
+                    </form>
+                </td>
+                <td>
+                    <form v-on:submit.prevent="deleteUser(user)">
+                        <input type="submit" class="btn btn-danger deleteUser" value="Delete"/>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<script>
+    window.app = new Vue({
+        el: '#app',
+        data: {
+            id: null,
+            username:'',
+            role_user:'',
+            role_admin:'',
+            deleted:'',
+            users: []
+        },
+        async mounted(){
+            await this.getUsers()
+        },
+        methods: {
+            getUsers: function (event){
+                axios.get('/admin/allUsers')
+                    .then(response=>{
+                        this.users = response.data
+                    })
+            },
+            findUsers: function (event) {
+                console.log(this.role_user)
+                console.log(this.nullCheck(this.role_user))
+                axios.post('/admin/filterUsers',{
+                        "id": this.id,
+                        "username": this.username,
+                        "roleUser": this.nullCheck(this.role_user),
+                        "roleAdmin": this.nullCheck(this.role_admin)
+                    })
+                    .then(response=>{
+                        this.users = response.data
+                    })
+            },
+            nullCheck: function (cat){
+                if (cat === null || cat ===false) return ""
+                else return cat
+            },
+            showUser: function (user) {
+                location.href = `/admin/users/${user.id}`
+            },
+            deleteUser: function (user) {
+                axios.delete(`/admin/deleteUser/${user.id}`)
+                    .then(response=>{
+                        this.deleted = response.data
+                        this.getUsers()
+                    })
+
+            }
+        }
+    })
+</script>
 </body>
 </html>
