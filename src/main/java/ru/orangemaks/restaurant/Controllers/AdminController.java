@@ -2,15 +2,13 @@ package ru.orangemaks.restaurant.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ru.orangemaks.restaurant.Domain.Admin.Products.*;
 import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserInputBoundary;
 import ru.orangemaks.restaurant.Domain.Admin.Users.EditUserRequestModel;
 import ru.orangemaks.restaurant.Domain.Admin.Users.FilterUserRequestModel;
-import ru.orangemaks.restaurant.Models.ProductCategories;
+import ru.orangemaks.restaurant.Models.ProductDtoModel;
 import ru.orangemaks.restaurant.Models.UserDtoModel;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -41,34 +39,6 @@ public class AdminController {
     }
 
 
-//    @PostMapping("/users")
-//    public ModelAndView users(FilterUserRequestModel filterUserRequestModel,
-//                              Long userId,
-//                              String action){
-//        if(action.equals("filter")){
-////            if (filterUserRequestModel.getROLE_USER()==null)
-////                filterUserRequestModel.setROLE_USER("");
-////            if (filterUserRequestModel.getROLE_ADMIN()==null)
-////                filterUserRequestModel.setROLE_ADMIN("");
-////
-////            ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
-////            modelAndView.addAllObjects(admin_userInputBoundary.filterUsers(filterUserRequestModel));
-////            return modelAndView;
-//        }
-//        else if(action.equals("delete")){
-////            ModelAndView modelAndView = new ModelAndView("Admin/admin_users");
-////            HashMap<String,String> map = admin_userInputBoundary.deleteUser(userId);
-////            for (String key: map.keySet()) {
-////                modelAndView.addObject(key,map.get(key));
-////            }
-////            modelAndView.addAllObjects(admin_userInputBoundary.getAll());
-////            return modelAndView;
-//        }
-//        else{
-//            return new ModelAndView("redirect:/admin/users/"+userId);
-//        }
-//    }
-
     @GetMapping("/user/{userId}")
     public UserDtoModel showConcreteUser(@PathVariable Long userId){
         return admin_userInputBoundary.findConcreteUser(userId);
@@ -78,62 +48,37 @@ public class AdminController {
     public boolean editUser(@PathVariable Long userId,
                             @RequestBody EditUserRequestModel editUserRequestModel
                                  ){
-        System.out.println(editUserRequestModel.getUsername()+"!"+editUserRequestModel.getRoleUser()+"!"+editUserRequestModel.getRoleAdmin());
         return admin_userInputBoundary.editUser(userId,editUserRequestModel);
     }
 
-    @GetMapping("/products")
-    public ModelAndView allProducts(){
-        ModelAndView modelAndView = new ModelAndView("Admin/admin_products");
-        modelAndView.addObject("categories", ProductCategories.class);
-        modelAndView.addAllObjects(admin_productInputBoundary.getAll());
-        return modelAndView;
+    @GetMapping("/allProducts")
+    public ProductsResponseModel allProducts(){
+        return admin_productInputBoundary.getAll();
     }
 
-    @PostMapping("/products")
-    public ModelAndView products(FilterProductRequestModel filterProductRequestModel,
-                                 CreateProductRequestModel createProductRequestModel,
-                                 Long productId,
-                                 String action){
-        ModelAndView modelAndView = new ModelAndView("Admin/admin_products");
-        switch (action) {
-            case "create":
-                modelAndView.addObject(admin_productInputBoundary.createProduct(createProductRequestModel));
-                modelAndView.addAllObjects(admin_productInputBoundary.getAll());
-                break;
-            case "filter":
-                if(filterProductRequestModel.getCategoryFilter().equals("none")) filterProductRequestModel.setCategoryFilter("");
-                modelAndView.addAllObjects(admin_productInputBoundary.filterProducts(filterProductRequestModel));
-                break;
-            case "delete":
-                modelAndView.addObject(admin_productInputBoundary.deleteProduct(productId));
-                modelAndView.addAllObjects(admin_productInputBoundary.getAll());
-                break;
-            case "show":
-                return new ModelAndView("redirect:/admin/products/" + productId);
-            default:
-                break;
-        }
-        modelAndView.addObject("categories", ProductCategories.class);
-        return modelAndView;
+    @PostMapping("/filterProducts")
+    public ProductsResponseModel filterProduct(@RequestBody FilterProductRequestModel filterProductRequestModel){
+        return admin_productInputBoundary.filterProducts(filterProductRequestModel);
     }
 
-    @GetMapping("/products/{productId}")
-    public ModelAndView showConcreteProduct(@PathVariable Long productId){
-        ModelAndView modelAndView = new ModelAndView("Admin/concreteProduct");
-        modelAndView.addObject("categories", ProductCategories.class);
-        modelAndView.addAllObjects(admin_productInputBoundary.findConcreteProduct(productId));
-        return modelAndView;
+    @PostMapping("/createProduct")
+    public boolean createProduct(@RequestBody CreateProductRequestModel createProductRequestModel){
+        return admin_productInputBoundary.createProduct(createProductRequestModel);
     }
 
-    @PostMapping("/products/{productId}")
-    public ModelAndView editUser(@Valid EditProductRequestModel editProductRequestModel,
+    @DeleteMapping("/deleteProduct/{productId}")
+    public ProductDtoModel deleteProduct(@PathVariable Long productId){
+        return admin_productInputBoundary.deleteProduct(productId);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ProductDtoModel showConcreteProduct(@PathVariable Long productId){
+        return admin_productInputBoundary.findConcreteProduct(productId);
+    }
+
+    @PutMapping("/product/{productId}")
+    public boolean editProduct(@RequestBody EditProductRequestModel editProductRequestModel,
                                  @PathVariable Long productId){
-
-        ModelAndView modelAndView = new ModelAndView("Admin/concreteProduct");
-        modelAndView.addAllObjects(admin_productInputBoundary.editProduct(productId,editProductRequestModel));
-        modelAndView.addObject("categories", ProductCategories.class);
-        modelAndView.addAllObjects(admin_productInputBoundary.findConcreteProduct(productId));
-        return modelAndView;
+        return admin_productInputBoundary.editProduct(productId,editProductRequestModel);
     }
 }

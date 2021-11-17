@@ -1,102 +1,165 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+    <th:block th:include="general.html :: headerfiles"></th:block>
     <title>Products</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/admin">Назад</a>
     <a class="navbar-brand" href="/">Главная</a>
 </nav>
-
-<form method="post">
-    <label>
-        <input type="number" name="id" placeholder="ID"/>
-    </label>
-    <label>
-        <input type="text" name="name" placeholder="Name">
-    </label>
-    <label>
-        <select class="form-select" id="categoryFilter" name="categoryFilter">
-            <option value="none"></option>
-            <option th:each="category : ${categories.values()}" th:value="${category.getCategory()}" th:text="${category.getCategory()}"></option>
-        </select>
-    </label>
-    <input type="hidden" name="action" th:value="filter"/>
-    <button type="submit" class="btn btn-primary">Find</button>
-</form>
-<h3 th:text="${operationStatus}"></h3>
-<table class="table table-bordered">
-    <thead>
-    <th scope="col">ID</th>
-    <th scope="col">Name</th>
-    <th scope="col">Price</th>
-    <th scope="col">Category</th>
-    <th scope="col">Description</th>
-    <th scope="col">View</th>
-    <th scope="col">Action</th>
-    </thead>
-    <tr>
-        <td>AUTO</td>
-        <form method="post">
+<div id="app">
+    <form v-on:submit.prevent="findProducts">
+        <label>
+            <input type="number" v-model="filterId" name="id" placeholder="ID"/>
+        </label>
+        <label>
+            <input type="text" v-model="filterName" name="name" placeholder="Name">
+        </label>
+        <label>
+            <select v-model="filterSelected" name="categoryFilter">
+                <option value="none"></option>
+                <option v-for="option in categories" v-bind:value="option">
+                    {{option}}
+                </option>
+            </select>
+        </label>
+        <input type="submit" class="btn btn-primary findProducts" value="Find">
+    </form>
+    <h3 v-if="deleted != ''">Продукт {{deleted}} успешно удален</h3>
+    <h3 v-if="createdStatus === true">Продукт успешно создан</h3>
+    <h3 v-else-if="createdStatus === false">Перед созданием заполните все поля</h3>
+    <table class="table table-bordered">
+        <thead>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Category</th>
+            <th scope="col">Description</th>
+            <th scope="col">View</th>
+            <th scope="col">Action</th>
+        </thead>
+        <tr>
+            <td>AUTO</td>
             <td>
                 <label>
-                    <input type="text" name="name" placeholder="Name">
+                    <input type="text"  v-model="createName" name="name" placeholder="Name">
                 </label>
             </td>
             <td>
                 <label>
-                    <input type="number" name="price" placeholder="Price">
+                    <input type="number" v-model="price" name="price" placeholder="Price">
                 </label>
             </td>
             <td>
                 <label>
-                    <select class="form-select" id="categoryAdd" name="categoryAdd">
-                        <option th:each="category : ${categories.values()}" th:value="${category.getCategory()}" th:text="${category.getCategory()}"></option>
+                    <select v-model="createSelected">
+                        <option v-for="option in categories" v-bind:value="option">
+                            {{option}}
+                        </option>
                     </select>
                 </label>
             </td>
             <td>
                 <label>
-                    <input type="text" name="description" placeholder="Description">
+                    <input type="text" v-model="description" name="description" placeholder="Description">
                 </label>
             </td>
             <td>
                 <label>
-                    <input type="text" name="img" placeholder="Img"/>
+                    <input type="text" v-model="img" name="img" placeholder="Img"/>
                 </label>
             </td>
             <td>
-                <input type="hidden" name="action" th:value="create"/>
-                <button type="submit" class="btn btn-success">Create</button>
-            </td>
-        </form>
-    </tr>
-    <th:block th:each="product: ${allProducts}">
-        <tr>
-            <td th:text="${product.getId()}"></td>
-            <td th:text="${product.getName()}"></td>
-            <td th:text="${product.getPrice()}"></td>
-            <td th:text="${product.getCategory()}"></td>
-            <td th:text="${product.getDescription()}"></td>
-            <td>
-                <form method="post">
-                    <input type="hidden" name="productId" th:value="${product.getId()}"/>
-                    <input type="hidden" name="action" th:value="show"/>
-                    <button type="submit" class="btn btn-primary">Show</button>
-                </form>
-            </td>
-            <td>
-                <form method="post">
-                    <input type="hidden" name="productId" th:value="${product.getId()}"/>
-                    <input type="hidden" name="action" th:value="delete"/>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <form v-on:submit.prevent="createProduct">
+                    <input type="submit" class="btn btn-success" value="Create">
                 </form>
             </td>
         </tr>
-    </th:block>
-</table>
+        <tr v-for="product in this.products">
+            <td>{{product.id}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.price}}</td>
+            <td>{{product.category}}</td>
+            <td>{{product.description}}</td>
+            <td>
+                <form v-on:submit.prevent="showProduct(product)">
+                    <input type="submit" class="btn btn-primary" value="Show">
+                </form>
+            </td>
+            <td>
+                <form v-on:submit.prevent="deleteProduct(product)">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    window.app = new Vue({
+        el: '#app',
+        data: {
+            deleted: '',
+            createdStatus: '',
+            filterId: null,
+            filterName: '',
+            filterSelected: '',
+            createName: '',
+            createSelected:'',
+            price: null,
+            description: '',
+            img: '',
+            categories: [],
+            products: []
+        },
+        async mounted(){
+            await this.getProducts()
+        },
+        methods: {
+            getProducts: function (event){
+                axios.get('/admin/allProducts')
+                    .then(response=>{
+                        this.products = response.data.products
+                        this.categories = response.data.categories
+                    })
+            },
+            findProducts: function (event) {
+                axios.post('/admin/filterProducts',{
+                    "id": this.filterId,
+                    "name": this.filterName,
+                    "categoryFilter": this.filterSelected === "none"? "":this.filterSelected
+                })
+                    .then(response=>{
+                        this.products = response.data.products
+                    })
+            },
+            createProduct: function (event) {
+                axios.post('/admin/createProduct',{
+                    "name": this.createName,
+                    "price": this.price,
+                    "categoryAdd": this.createSelected,
+                    "description": this.description,
+                    "img": this.img
+                })
+                    .then(response=>{
+                        this.createdStatus = response.data
+                        this.findProducts()
+                    })
+            },
+            showProduct: function (product) {
+                location.href = `/admin/products/${product.id}`
+            },
+            deleteProduct: function (product) {
+                axios.delete(`/admin/deleteProduct/${product.id}`)
+                    .then(response=>{
+                        this.deleted = response.data
+                        this.findProducts()
+                    })
+
+            }
+        }
+    })
+</script>
 </body>
 </html>

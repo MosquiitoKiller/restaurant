@@ -1,15 +1,15 @@
 package ru.orangemaks.restaurant.Domain.Admin.Products;
 
+import ru.orangemaks.restaurant.Models.ProductCategories;
 import ru.orangemaks.restaurant.Models.ProductDtoModel;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface Admin_ProductOutputBoundary {
-    HashMap<String, List<ProductDtoModel>> prepareProducts(List<ProductDtoModel> productDtoModels);
-    HashMap<String,String> prepareSuccessAddProductView(ProductDtoModel productDtoModel);
-    HashMap<String,String> prepareFailAddProductView();
-    HashMap<String,String> prepareSuccessEditProductView(ProductDtoModel productDtoModel);
-    HashMap<String,String> prepareDeletedProductView(ProductDtoModel productDtoModel);
-    HashMap<String,ProductDtoModel> prepareFindedProductView(ProductDtoModel productDtoModel);
+    ProductsResponseModel prepareProducts(List<ProductDtoModel> productDtoModels, ProductCategories[] productCategories);
+    boolean prepareSuccessAddProductView(ProductDtoModel productDtoModel);
+    boolean prepareFailAddProductView();
+    boolean prepareSuccessEditProductView(ProductDtoModel productDtoModel);
+    ProductDtoModel prepareDeletedProductView(ProductDtoModel productDtoModel);
+    ProductDtoModel prepareFindedProductView(ProductDtoModel productDtoModel);
 }

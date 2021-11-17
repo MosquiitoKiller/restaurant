@@ -1,9 +1,9 @@
 package ru.orangemaks.restaurant.Domain.Admin.Products;
 
 import ru.orangemaks.restaurant.Entities.Product;
+import ru.orangemaks.restaurant.Models.ProductCategories;
 import ru.orangemaks.restaurant.Models.ProductDtoModel;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
@@ -18,13 +18,14 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
     }
 
     @Override
-    public HashMap<String, List<ProductDtoModel>> getAll() {
+    public ProductsResponseModel getAll() {
         List<Product> products = admin_productDataAccess.getAll();
-        return admin_productOutputBoundary.prepareProducts(ProductDtoModel.listProductMapper(products));
+        return admin_productOutputBoundary
+                .prepareProducts(ProductDtoModel.listProductMapper(products), ProductCategories.values());
     }
 
     @Override
-    public HashMap<String, String> createProduct(CreateProductRequestModel createProductRequestModel) {
+    public boolean createProduct(CreateProductRequestModel createProductRequestModel) {
         if (createProductRequestModel.getName().equals("") || createProductRequestModel.getPrice() == null
                 || createProductRequestModel.getCategoryAdd().equals("") || createProductRequestModel.getDescription().equals("")
                 || createProductRequestModel.getImg().equals("")) {
@@ -40,21 +41,22 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
     }
 
     @Override
-    public HashMap<String, List<ProductDtoModel>> filterProducts(FilterProductRequestModel filterProductRequestModel) {
+    public ProductsResponseModel filterProducts(FilterProductRequestModel filterProductRequestModel) {
         List<Product> products = admin_productDataAccess.filter(filterProductRequestModel.getId(),
                 filterProductRequestModel.getName(),
                 filterProductRequestModel.getCategoryFilter());
-        return admin_productOutputBoundary.prepareProducts(ProductDtoModel.listProductMapper(products));
+        return admin_productOutputBoundary
+                .prepareProducts(ProductDtoModel.listProductMapper(products), ProductCategories.values());
     }
 
     @Override
-    public HashMap<String, ProductDtoModel> findConcreteProduct(Long id) {
+    public ProductDtoModel findConcreteProduct(Long id) {
         Product product = admin_productDataAccess.findById(id);
         return admin_productOutputBoundary.prepareFindedProductView(ProductDtoModel.productMapper(product));
     }
 
     @Override
-    public HashMap<String, String> editProduct(Long id, EditProductRequestModel editProductRequestModel) {
+    public boolean editProduct(Long id, EditProductRequestModel editProductRequestModel) {
         Product product = admin_productDataAccess.findById(id);
         if(!editProductRequestModel.getName().equals("")) product.setName(editProductRequestModel.getName());
         if(editProductRequestModel.getPrice()!=null) product.setPrice(editProductRequestModel.getPrice());
@@ -66,7 +68,7 @@ public class Admin_ProductInteractor implements Admin_ProductInputBoundary {
     }
 
     @Override
-    public HashMap<String, String> deleteProduct(Long id) {
+    public ProductDtoModel deleteProduct(Long id) {
         Product product = admin_productDataAccess.deleteById(id);
         return admin_productOutputBoundary.prepareDeletedProductView(ProductDtoModel.productMapper(product));
     }

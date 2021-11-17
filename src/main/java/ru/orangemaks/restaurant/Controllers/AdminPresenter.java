@@ -1,11 +1,12 @@
 package ru.orangemaks.restaurant.Controllers;
 
 import ru.orangemaks.restaurant.Domain.Admin.Products.Admin_ProductOutputBoundary;
+import ru.orangemaks.restaurant.Domain.Admin.Products.ProductsResponseModel;
+import ru.orangemaks.restaurant.Models.ProductCategories;
 import ru.orangemaks.restaurant.Models.ProductDtoModel;
 import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserOutputBoundary;
 import ru.orangemaks.restaurant.Models.UserDtoModel;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class AdminPresenter implements Admin_UserOutputBoundary, Admin_ProductOutputBoundary {
@@ -36,44 +37,36 @@ public class AdminPresenter implements Admin_UserOutputBoundary, Admin_ProductOu
     }
 
     @Override
-    public HashMap<String, List<ProductDtoModel>> prepareProducts(List<ProductDtoModel> productDtoModels) {
-        HashMap<String,List<ProductDtoModel>> viewModel = new HashMap<>();
-        viewModel.put("allProducts",productDtoModels);
-        return viewModel;
+    public ProductsResponseModel prepareProducts(List<ProductDtoModel> productDtoModels, ProductCategories[] productCategories) {
+        String[] categories = new String[productCategories.length];
+        for (int i=0;i<productCategories.length;++i) {
+            categories[i] = productCategories[i].getCategory();
+        }
+        return new ProductsResponseModel(productDtoModels,categories);
     }
 
     @Override
-    public HashMap<String, String> prepareSuccessAddProductView(ProductDtoModel productDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("operationStatus","Продукт успешно добвлен");
-        return viewModel;
+    public boolean prepareSuccessAddProductView(ProductDtoModel productDtoModel) {
+        return true;
     }
 
     @Override
-    public HashMap<String, String> prepareFailAddProductView() {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("operationStatus","Перед добавлением заполните все поля");
-        return viewModel;
+    public boolean prepareFailAddProductView() {
+        return false;
     }
 
     @Override
-    public HashMap<String, String> prepareSuccessEditProductView(ProductDtoModel productDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("editStatus","Продукт успешно изменен");
-        return viewModel;
+    public boolean prepareSuccessEditProductView(ProductDtoModel productDtoModel) {
+        return true;
     }
 
     @Override
-    public HashMap<String, String> prepareDeletedProductView(ProductDtoModel productDtoModel) {
-        HashMap<String,String> viewModel = new HashMap<>();
-        viewModel.put("operationStatus","Пользователь успешно удален");
-        return viewModel;
+    public ProductDtoModel prepareDeletedProductView(ProductDtoModel productDtoModel) {
+        return productDtoModel;
     }
 
     @Override
-    public HashMap<String, ProductDtoModel> prepareFindedProductView(ProductDtoModel productDtoModel) {
-        HashMap<String,ProductDtoModel> viewModel = new HashMap<>();
-        viewModel.put("product",productDtoModel);
-        return viewModel;
+    public ProductDtoModel prepareFindedProductView(ProductDtoModel productDtoModel) {
+        return productDtoModel;
     }
 }

@@ -10,4 +10,9 @@ public class PageController {
     public String showConcreteUser(@PathVariable Long userId){
         return "Admin/concreteUser";
     }
+
+    @GetMapping("/admin/products/{productId}")
+    public String showConcreteProduct(@PathVariable Long productId){
+        return "Admin/concreteProduct";
+    }
 }

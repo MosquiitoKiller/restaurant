@@ -11,7 +11,7 @@ public enum ProductCategories {
     HOT_DRINK("hot drink"),
     COLD_DRINK("cold drink");
 
-    private final String category;
+    final String category;
 
     ProductCategories(String category) {
         this.category = category;
