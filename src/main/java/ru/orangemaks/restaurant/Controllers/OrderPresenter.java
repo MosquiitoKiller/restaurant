@@ -1,5 +1,6 @@
 package ru.orangemaks.restaurant.Controllers;
 
+import ru.orangemaks.restaurant.Domain.Order.BasketResponseModel;
 import ru.orangemaks.restaurant.Domain.Order.OrderOutputBoundary;
 import ru.orangemaks.restaurant.Domain.Order.OrderResponseModel;
 import ru.orangemaks.restaurant.Models.ProductCategories;
@@ -29,4 +30,11 @@ public class OrderPresenter implements OrderOutputBoundary {
         }
         return new OrderResponseModel(menu, categories);
     }
+
+    @Override
+    public BasketResponseModel prepareBasket(List<ProductDtoModel> productDtoModels) {
+        return new BasketResponseModel(productDtoModels);
+    }
+
+
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface OrderOutputBoundary {
     OrderResponseModel prepareAllProductView(List<ProductDtoModel> productDtoModelList, ProductCategories[] categories);
+    BasketResponseModel prepareBasket(List<ProductDtoModel> productDtoModels);
 }

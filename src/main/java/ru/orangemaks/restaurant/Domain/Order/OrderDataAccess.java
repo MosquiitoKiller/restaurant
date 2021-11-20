@@ -7,4 +7,5 @@ import java.util.List;
 public interface OrderDataAccess {
     List<Product> getAll();
     List<Product> filter(Long id,String name,String category);
+    Product findById(Long id);
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <th:block th:include="general.html :: headerfiles"></th:block>
+    <title>Basket</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/menu">К выбору блюд</a>
+    <a class="navbar-brand" href="/">Главная</a>
+</nav>
+<div id="basket">
+    <table class="table table-bordered">
+        <thead>
+            <th scope="col">Название</th>
+            <th scope="col">Цена</th>
+        </thead>
+        <tbody>
+            <tr v-for="product in this.products">
+                <td>{{product.name}}</td>
+                <td>{{product.count}} * {{product.price}}р.</td>
+            </tr>
+            <tr style="background-color: greenyellow">
+                <td>Итого:</td>
+                <td>{{sum}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="text-center" @click="payOrder">Оплатить</button>
+</div>
+<script>
+    window.app = new Vue({
+        el: '#basket',
+        data: {
+            order: new Map(),
+            productsId:[],
+            products: [],
+            sum:0
+        },
+        async mounted() {
+            await this.getInfo();
+        },
+        methods: {
+            getInfo: async function (event) {
+                this.order = new Map(JSON.parse(localStorage.map))
+                for (let key of this.order){
+                    this.productsId.push(key[0])
+                }
+                axios.post("/getProductsById",{
+                    "productsId": this.productsId
+                })
+                    .then(response=>{
+                        this.products = response.data.products
+                        for (let i = 0; i < this.products.length; i++) {
+                            this.products[i].count = this.order.get(this.products[i].id)
+                            this.sum+=this.products[i].price * this.products[i].count
+                        }
+                    })
+            },
+            payOrder: function (){
+                localStorage.removeItem('map')
+                console.log(new Map(JSON.parse(localStorage.map)))
+            }
+        }
+    })
+</script>
+</body>
+</html>

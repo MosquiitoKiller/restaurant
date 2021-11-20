@@ -1,7 +1,11 @@
 package ru.orangemaks.restaurant.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.orangemaks.restaurant.Domain.Order.BasketRequestModel;
+import ru.orangemaks.restaurant.Domain.Order.BasketResponseModel;
 import ru.orangemaks.restaurant.Domain.Order.OrderInputBoundary;
 import ru.orangemaks.restaurant.Domain.Order.OrderResponseModel;
 import ru.orangemaks.restaurant.Models.ProductCategories;
@@ -27,5 +31,10 @@ public class OrderController {
     @GetMapping("/get_menu")
     public OrderResponseModel getAllProducts(){
         return orderInputBoundary.getAll();
+    }
+
+    @PostMapping("/getProductsById")
+    public BasketResponseModel getProducts(@RequestBody BasketRequestModel basketRequestModel){
+        return orderInputBoundary.getProductsById(basketRequestModel);
     }
 }

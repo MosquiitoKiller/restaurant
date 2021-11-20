@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <th:block th:include="general.html :: headerfiles"></th:block>
+    <title>menu</title>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div>
+            <div class="dashboard_rules">
+                <a class="navbar-brand" href="/">Назад</a>
+            </div>
+            <div class="dashboard_rules">
+                <a class="navbar-brand" v-for="cat in this.categories" :href="`#${cat}`">
+                    {{cat}}
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div class="text-right flex-fill border-dark">
+        <h5>Итого: {{sum}}р.</h5>
+        <button @click="goToBasket">Корзина</button>
+    </div>
+    <div>
+        <div v-for="category in this.categories">
+            <div>
+                <h2>{{category}}</h2>
+                <a :name="category"></a>
+            </div>
+            <div v-for="product in products[category]">
+                <img :src="product.img" width="200" height="200">
+                <div>
+                    <button class="button is-success" @click="removeFromCart(product)">-</button>
+                    <input type="number" :id="`count${product.id}`" value="0" size="5" disabled>
+                    <button class="button is-success" @click="addToCart(product)">+</button>
+                </div>
+                <h4>{{product.name}}  Цена: {{product.price}} Описание:</h4>
+                <h6>{{product.description}}</h6>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    window.app = new Vue({
+        el: '#app',
+        data: {
+            info:null,
+            products:null,
+            categories: [],
+            order: new Map(JSON.parse(localStorage.map)),
+            sum: 0,
+
+        },
+        async mounted() {
+            await this.getInfo();
+        },
+        methods: {
+            getInfo: async function (event) {
+                await axios
+                    .get("/get_menu")
+                    .then(response => {
+                        this.info = response.data
+                        this.products = this.info.products
+                        this.categories = this.info.categories
+                    })
+            },
+            removeFromCart: function (product) {
+                let input = document.getElementById(`count${product.id}`)
+                if (Number(input.value)>0){
+                    input.value=Number(input.value)-1
+                    if(Number(input.value)===0) this.order.delete(product.id)
+                    else this.order.set(product.id,Number(input.value))
+                    this.sum-=product.price
+                    localStorage.map = JSON.stringify(Array.from(this.order.entries()));
+                }
+            },
+            addToCart: function (product) {
+                let input = document.getElementById(`count${product.id}`)
+                input.value=Number(input.value)+1
+                this.order.set(product.id,Number(input.value))
+                this.sum+=product.price
+                localStorage.map = JSON.stringify(Array.from(this.order.entries()));
+            },
+            goToBasket: function (){
+                location.href = '/basket'
+            }
+        }
+    })
+</script>
+</body>
+</html>
