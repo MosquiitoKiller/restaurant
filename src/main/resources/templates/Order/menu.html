@@ -49,7 +49,9 @@
             info:null,
             products:null,
             categories: [],
-            order: new Map(JSON.parse(localStorage.map)),
+            productsId: [],
+            productsBasket: [],
+            order: new Map(),
             sum: 0,
 
         },
@@ -64,6 +66,25 @@
                         this.info = response.data
                         this.products = this.info.products
                         this.categories = this.info.categories
+                    })
+                this.recoveryBasket()
+            },
+            recoveryBasket: function (){
+                this.order = localStorage.map===undefined? new Map():new Map(JSON.parse(localStorage.map))
+                for (let key of this.order){
+                    let input = document.getElementById(`count${key[0]}`)
+                    input.value = Number(key[1])
+                    this.productsId.push(key[0])
+                }
+                axios.post("/getProductsById",{
+                    "productsId": this.productsId
+                })
+                    .then(response=>{
+                        this.productsBasket = response.data.products
+                        for (let i = 0; i < this.productsBasket.length; i++) {
+                            this.productsBasket[i].count = this.order.get(this.productsBasket[i].id)
+                            this.sum+=this.productsBasket[i].price * this.productsBasket[i].count
+                        }
                     })
             },
             removeFromCart: function (product) {
