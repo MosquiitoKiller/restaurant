@@ -1,2 +1,0 @@
-FROM maven:3.5-jdk-8
-EXPOSE 8080
