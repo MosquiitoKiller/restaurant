@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS products (
     description VARCHAR(256) NOT NULL,
     img VARCHAR(100) NOT NULL
     );
-INSERT INTO roles
-VALUES ('1','ROLE_USER'), ('2','ROLE_ADMIN');
+-- INSERT INTO roles
+-- VALUES ('1','ROLE_USER'), ('2','ROLE_ADMIN');
