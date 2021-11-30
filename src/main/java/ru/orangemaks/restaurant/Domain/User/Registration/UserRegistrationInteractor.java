@@ -1,6 +1,5 @@
 package ru.orangemaks.restaurant.Domain.User.Registration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,20 +8,16 @@ import ru.orangemaks.restaurant.Entities.User;
 import ru.orangemaks.restaurant.Models.RoleCategories;
 
 import java.util.Collections;
-import java.util.HashMap;
-
 
 public class UserRegistrationInteractor implements UserRegistrationInputBoundary {
     UserDataAccess userDataAccess;
-
     UserRegistrationOutputBoundary userRegistrationOutputBoundary;
-
-    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserRegistrationInteractor(UserDataAccess userDataAccess, UserRegistrationOutputBoundary userRegistrationOutputBoundary) {
+    public UserRegistrationInteractor(UserDataAccess userDataAccess, UserRegistrationOutputBoundary userRegistrationOutputBoundary, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDataAccess = userDataAccess;
         this.userRegistrationOutputBoundary = userRegistrationOutputBoundary;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
