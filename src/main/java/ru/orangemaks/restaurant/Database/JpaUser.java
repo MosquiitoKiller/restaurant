@@ -1,6 +1,9 @@
 package ru.orangemaks.restaurant.Database;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import ru.orangemaks.restaurant.Domain.Admin.Users.Admin_UserDataAccess;
+import ru.orangemaks.restaurant.Domain.Order.OrderUserDataAccess;
 import ru.orangemaks.restaurant.Domain.User.Registration.UserDataAccess;
 import ru.orangemaks.restaurant.Entities.Role;
 import ru.orangemaks.restaurant.Entities.User;
@@ -13,7 +16,7 @@ import javax.persistence.criteria.*;
 import java.util.Comparator;
 import java.util.List;
 
-public class JpaUser implements UserDataAccess, Admin_UserDataAccess {
+public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserDataAccess {
 
 
     private final UserRepository userRepository;
@@ -98,5 +101,11 @@ public class JpaUser implements UserDataAccess, Admin_UserDataAccess {
             return user;
         }
         else return null;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(auth.getName());
     }
 }

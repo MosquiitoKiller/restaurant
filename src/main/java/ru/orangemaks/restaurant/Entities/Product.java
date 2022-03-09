@@ -2,6 +2,7 @@ package ru.orangemaks.restaurant.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -19,6 +20,9 @@ public class Product implements Serializable {
     String description;
     @Column(name = "img")
     String img;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderProducts> orderProducts;
 
     public Product(String name, Integer price, String category, String description, String img) {
         this.name = name;
@@ -78,5 +82,13 @@ public class Product implements Serializable {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public List<OrderProducts> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProducts> orderProducts) {
+        this.orderProducts = orderProducts;
     }
 }

@@ -6,11 +6,11 @@ import ru.orangemaks.restaurant.Models.ProductDtoModel;
 import java.util.HashMap;
 import java.util.List;
 
-public class OrderResponseModel {
+public class MenuResponseModel {
     HashMap<ProductCategories,List<ProductDtoModel>> products;
     ProductCategories[] categories;
 
-    public OrderResponseModel(HashMap<ProductCategories, List<ProductDtoModel>> products, ProductCategories[] categories) {
+    public MenuResponseModel(HashMap<ProductCategories, List<ProductDtoModel>> products, ProductCategories[] categories) {
         this.products = products;
         this.categories = categories;
     }

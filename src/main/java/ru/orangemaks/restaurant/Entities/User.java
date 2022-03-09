@@ -27,6 +27,9 @@ public class User implements UserDetails {
     )
     private List<Role> roles;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -93,5 +96,13 @@ public class User implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

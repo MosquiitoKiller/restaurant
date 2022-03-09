@@ -26,16 +26,31 @@
             </tr>
         </tbody>
     </table>
-    <button class="text-center" @click="payOrder">Оплатить</button>
+    <form v-on:submit.prevent="payOrder">
+        <input type="text" v-model="street" name="street" placeholder="Улица" required>
+        <input type="number" v-model="house" name="house" placeholder="Дом" required>
+        <input type="number" v-model="building" name="building" placeholder="Корпус" required>
+        <input type="number" v-model="apartment" name="apartment" placeholder="Квартира" required>
+
+        <input v-if="productsId.length!=0 && orderStatus!=true" type="submit" class="btn btn-primary payOrder" value="Оформить заказ">
+        <input v-else type="submit" class="btn btn-primary payOrder" value="Оформить заказ" disabled>
+    </form>
+    <h3 v-if="orderStatus===true">Заказ Успешно выполнен</h3>
+    <h3 v-else-if="orderStatus===false">Не удалось выполнить заказ, повторите попытку позже</h3>
 </div>
 <script>
     window.app = new Vue({
         el: '#basket',
         data: {
             order: new Map(),
-            productsId:[],
+            street: "",
+            house: null,
+            building: null,
+            apartment: null,
+            productsId: [],
             products: [],
-            sum:0
+            sum: 0,
+            orderStatus: null
         },
         async mounted() {
             await this.getInfo();
@@ -58,7 +73,22 @@
                     })
             },
             payOrder: function (){
-                localStorage.removeItem('map')
+                this.order = new Map(JSON.parse(localStorage.map))
+                let map=''
+                for (let key of this.order){
+                    map+=key[0]+'='+key[1]+'&'
+                }
+                map=map.substring(0,map.length-1);
+                let address = "Ул " + this.street +
+                    " д." + this.house.toString() +
+                    " к." + this.building.toString() +
+                    " кв." + this.apartment.toString();
+                axios.post(`/formOrder?${map}&address=${address}`)
+                    .then(response=>{
+                        this.orderStatus=response.data
+                        if(this.orderStatus===true) localStorage.removeItem('map')
+                    })
+
             }
         }
     })

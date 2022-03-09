@@ -1,7 +1,7 @@
 package ru.orangemaks.restaurant.Database;
 
 import ru.orangemaks.restaurant.Domain.Admin.Products.Admin_ProductDataAccess;
-import ru.orangemaks.restaurant.Domain.Order.OrderDataAccess;
+import ru.orangemaks.restaurant.Domain.Order.MenuDataAccess;
 import ru.orangemaks.restaurant.Entities.Product;
 import ru.orangemaks.restaurant.Repositories.ProductRepository;
 
@@ -11,7 +11,7 @@ import javax.persistence.criteria.*;
 import java.util.Comparator;
 import java.util.List;
 
-public class JpaProduct implements Admin_ProductDataAccess, OrderDataAccess {
+public class JpaProduct implements Admin_ProductDataAccess, MenuDataAccess {
     private final ProductRepository productRepository;
 
     @PersistenceContext
