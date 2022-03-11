@@ -67,15 +67,6 @@ public class OrderInteractor implements OrderInputBoundary{
         }
         order.setProducts(orderProducts);
         orderDataAccess.save(order);
-        StringBuilder message = new StringBuilder("Вы офрормили заказ:\n");
-        for(OrderProducts products: orderProducts){
-            message.append(products.getProduct().getName())
-                    .append(": ")
-                    .append(products.getProduct().getPrice())
-                    .append("*")
-                    .append(products.getCount())
-                    .append("\n");
-        }
         return orderOutputBoundary.prepareSuccessFormOrder();
     }
 }
