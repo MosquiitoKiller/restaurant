@@ -19,20 +19,17 @@ public class OrderInteractor implements OrderInputBoundary{
     private final MenuDataAccess menuDataAccess;
     private final OrderUserDataAccess orderUserDataAccess;
     private final OrderProductDataAccess orderProductDataAccess;
-    private final MailOrderSender mailOrderSender;
 
     public OrderInteractor(OrderOutputBoundary orderOutputBoundary,
                            OrderDataAccess orderDataAccess,
                            MenuDataAccess menuDataAccess,
                            OrderUserDataAccess orderUserDataAccess,
-                           OrderProductDataAccess orderProductDataAccess,
-                           MailOrderSender mailOrderSender) {
+                           OrderProductDataAccess orderProductDataAccess) {
         this.orderOutputBoundary = orderOutputBoundary;
         this.orderDataAccess = orderDataAccess;
         this.menuDataAccess = menuDataAccess;
         this.orderUserDataAccess = orderUserDataAccess;
         this.orderProductDataAccess = orderProductDataAccess;
-        this.mailOrderSender = mailOrderSender;
     }
 
     @Override
@@ -79,7 +76,6 @@ public class OrderInteractor implements OrderInputBoundary{
                     .append(products.getCount())
                     .append("\n");
         }
-        (new Thread(()-> mailOrderSender.sendOrderInfo(currentUser.getUsername(), message.toString()))).start();
         return orderOutputBoundary.prepareSuccessFormOrder();
     }
 }
