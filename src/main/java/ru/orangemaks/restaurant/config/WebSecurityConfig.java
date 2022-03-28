@@ -33,6 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     //Доступ только для не зарегистрированных пользователей
                     .antMatchers("/registration").not().fullyAuthenticated()
+                    //Доступ только для зарегистрированных пользователей
+                    .antMatchers("/lk").fullyAuthenticated()
                     //Доступ только для пользователей с ролью Администратор
                     .antMatchers("/admin/**","/actuator/**").hasRole("ADMIN")
                     .antMatchers("/basket").hasRole("USER")

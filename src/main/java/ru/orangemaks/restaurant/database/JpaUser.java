@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.orangemaks.restaurant.domain.admin.users.Admin_UserDataAccess;
 import ru.orangemaks.restaurant.domain.order.OrderUserDataAccess;
+import ru.orangemaks.restaurant.domain.user.lk.LkUserDataAccess;
 import ru.orangemaks.restaurant.domain.user.registration.UserDataAccess;
 import ru.orangemaks.restaurant.entities.Role;
 import ru.orangemaks.restaurant.entities.User;
@@ -16,7 +17,7 @@ import javax.persistence.criteria.*;
 import java.util.Comparator;
 import java.util.List;
 
-public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserDataAccess {
+public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserDataAccess, LkUserDataAccess {
 
 
     private final UserRepository userRepository;

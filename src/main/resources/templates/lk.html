@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <th:block th:include="general.html :: headerfiles"></th:block>
+    <title>LK</title>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div>
+            <a class="navbar-brand" href="/">Главная</a>
+            <a class="navbar-brand" href="/menu">Меню</a>
+        </div>
+    </nav>
+    <div class="userInfo">
+        <h4>{{username}}</h4>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <th scope="col">ID</th>
+        <th scope="col">Заказ</th>
+        <th scope="col">Дата</th>
+        </thead>
+        <tr v-for="order in this.ordersList">
+            <td>
+                {{order.id}}
+            </td>
+            <td>
+                <h6 v-for="product in order.orderProductsDtoModels">
+                    {{product.product.name}}*{{product.count}}
+                </h6>
+            </td>
+            <td>
+                {{order.date}}
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    window.app = new Vue({
+        el: '#app',
+        data: {
+            username: '',
+            ordersList: null
+        },
+        async mounted(){
+            await this.getLkInfo()
+        },
+        methods: {
+            getLkInfo: function (event) {
+                axios.get("/lkInfo")
+                    .then(response=>{
+                        console.log(response.data)
+                        this.username = response.data.user.username;
+                        this.ordersList = response.data.ordersList;
+                    })
+            }
+        }
+    });
+</script>
+</body>
+</html>
