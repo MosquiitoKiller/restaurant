@@ -13,15 +13,13 @@ import ru.orangemaks.restaurant.domain.user.registration.UserRegistrationInputBo
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
     UserRegistrationInputBoundary userRegistrationInteractor;
 
+    public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, UserRegistrationInputBoundary userRegistrationInteractor) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userRegistrationInteractor = userRegistrationInteractor;
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -57,6 +55,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userRegistrationInteractor).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userRegistrationInteractor).passwordEncoder(bCryptPasswordEncoder);
     }
 }
