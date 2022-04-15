@@ -17,11 +17,19 @@ import javax.persistence.criteria.*;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Class data access to User
+ */
 public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserDataAccess, LkUserDataAccess {
 
-
+    /**
+     * data access
+     */
     private final UserRepository userRepository;
 
+    /**
+     * default EntityManager
+     */
     @PersistenceContext
     private EntityManager em;
 
@@ -29,11 +37,23 @@ public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserD
         this.userRepository = userRepository;
     }
 
+    /**
+     * get all users
+     * @return list of all users
+     */
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
+    /**
+     * filter user by parametres
+     * @param id id user
+     * @param username username
+     * @param ROLE_USER role parameter
+     * @param ROLE_ADMIN role parameter
+     * @return filtered users
+     */
     @Override
     public List<User> filter(Long id, String username, String ROLE_USER, String ROLE_ADMIN) {
         if (id==null && username.equals("") && ROLE_USER.equals("") && ROLE_ADMIN.equals("")){
@@ -79,21 +99,40 @@ public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserD
         return users;
     }
 
+    /**
+     * find user by id
+     * @param id id
+     * @return user by id
+     */
     @Override
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
+    /**
+     * save user
+     * @param user user for save
+     */
     @Override
     public void save(User user) {
         userRepository.save(user);
     }
 
+    /**
+     * find user by username
+     * @param username username
+     * @return user by username
+     */
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * delete user by id
+     * @param id id
+     * @return deleted user
+     */
     @Override
     public User deleteById(Long id) {
         User user = userRepository.findById(id).orElse(null);
@@ -104,6 +143,10 @@ public class JpaUser implements UserDataAccess, Admin_UserDataAccess, OrderUserD
         else return null;
     }
 
+    /**
+     * get user by session
+     * @return user by session
+     */
     @Override
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

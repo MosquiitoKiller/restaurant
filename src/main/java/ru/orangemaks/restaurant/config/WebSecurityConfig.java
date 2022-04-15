@@ -1,5 +1,6 @@
 package ru.orangemaks.restaurant.config;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,10 +11,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.orangemaks.restaurant.domain.user.registration.UserRegistrationInputBoundary;
 
+/**
+ * Security Configuration
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * For crypt password
+     */
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    /**
+     * For config UserDetailsService
+     */
     UserRegistrationInputBoundary userRegistrationInteractor;
 
     public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, UserRegistrationInputBoundary userRegistrationInteractor) {
@@ -21,8 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userRegistrationInteractor = userRegistrationInteractor;
     }
 
+    /**
+     * Endpoint access configuration
+     * @param httpSecurity object HttpSecurity for configuration security
+     */
+    @SneakyThrows
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
+    protected void configure(HttpSecurity httpSecurity)  {
         httpSecurity
                 .csrf()
                     .disable()
@@ -53,8 +68,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/");
     }
 
+    /**
+     * config default userDetailsService and encoder
+     * @param auth object AuthenticationManagerBuilder for configuration default settings
+     */
+    @SneakyThrows
     @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configureGlobal(AuthenticationManagerBuilder auth){
         auth.userDetailsService(userRegistrationInteractor).passwordEncoder(bCryptPasswordEncoder);
     }
 }
